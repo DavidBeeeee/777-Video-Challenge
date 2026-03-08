@@ -62,15 +62,23 @@ body::before {
   color:var(--teal); flex-shrink:0;
 }
 #progress-track {
-  flex:1; height:3px;
-  background:var(--border); border-radius:2px; overflow:hidden;
+  flex:1; height:5px;
+  background:var(--border); border-radius:3px; overflow:visible; position:relative;
 }
 #progress-fill {
-  height:100%;
-  background:linear-gradient(90deg,var(--teal),var(--cyan));
+  position:absolute; bottom:0; left:0;
+  height:3px;
+  background:linear-gradient(90deg,#3b82f6,#60a5fa);
   border-radius:2px;
   transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
   width:0%;
+}
+#progress-fill-l2 {
+  position:absolute; bottom:0; left:0;
+  height:5px; border-radius:3px; z-index:2;
+  background:linear-gradient(90deg,#4ade80,#22d3ee,#4ade80);
+  transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
+  width:0%; opacity:0;
 }
 #progress-label {
   font-family:'Space Mono',monospace;
@@ -91,7 +99,6 @@ body::before {
   display:flex; flex-direction:column; justify-content:flex-start;
 }
 /* Short-content screens benefit from vertical centering */
-#screen-0.active,
 #screen-1.active,
 #screen-2a.active,
 #screen-2b.active,
@@ -342,6 +349,15 @@ body::before {
   cursor:pointer; transition:all 0.2s;
 }
 .btn-primary:hover { background:#5eead4; transform:translateY(-1px); }
+
+.btn-secondary {
+  background:transparent; color:var(--muted);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:17px; letter-spacing:0.08em;
+  padding:14px 24px; border:1.5px solid var(--border); border-radius:9px;
+  cursor:pointer; transition:all 0.2s;
+}
+.btn-secondary:hover { border-color:var(--teal); color:var(--teal); }
 
 .btn-filmed {
   background:linear-gradient(135deg,#2dd4bf,#60a5fa);
@@ -683,6 +699,94 @@ body::before {
 .vdot { width:9px; height:9px; border-radius:50%; background:var(--border); transition:all 0.3s; }
 .vdot.done { background:var(--teal); }
 .vdot.active { background:var(--cyan); width:26px; border-radius:4px; }
+.vdot.filmed {
+  background:var(--green); width:18px; height:18px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; line-height:1; color:#000; font-weight:700;
+}
+.vdot.skipped {
+  background:#ef4444; width:18px; height:18px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; line-height:1; color:#fff; font-weight:700;
+}
+
+/* ── PROGRESS BAR LEVEL COMPLETE ── */
+.progress-l1-complete #progress-fill {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd) !important;
+}
+.progress-l2-complete #progress-fill-l2 {
+  animation: progressGlow 1.5s ease-in-out infinite;
+  opacity: 1 !important;
+}
+@keyframes progressGlow {
+  0%,100% { box-shadow: 0 0 8px rgba(74,222,128,0.6); }
+  50%      { box-shadow: 0 0 22px rgba(74,222,128,0.95), 0 0 40px rgba(34,211,238,0.5); }
+}
+.progress-level-label {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:14px; letter-spacing:0.1em;
+  animation: levelFadeIn 0.6s ease forwards;
+}
+.progress-level-label.l1 { color:#60a5fa; }
+.progress-level-label.l2 { color:#4ade80; }
+@keyframes levelFadeIn {
+  from { opacity:0; transform:scale(0.8); }
+  to   { opacity:1; transform:scale(1); }
+}
+
+/* ── CONFETTI CANVAS ── */
+#confetti-canvas {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  pointer-events:none; z-index:9999; display:none;
+}
+
+/* ── PREFACE SCREEN ENHANCEMENTS ── */
+.vi-result-badge {
+  display:inline-block;
+  background:linear-gradient(135deg,rgba(74,222,128,0.15),rgba(34,211,238,0.12));
+  border:1px solid rgba(74,222,128,0.35);
+  border-radius:30px; padding:6px 20px;
+  font-size:12px; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--green); font-family:'Space Mono',monospace;
+  margin-bottom:18px;
+}
+.vi-result-badge span { color:var(--muted); margin-right:6px; }
+.vi-framework {
+  background:rgba(30,45,64,0.7);
+  border:1px solid rgba(45,212,191,0.2);
+  border-radius:14px; padding:22px 26px; margin:20px 0;
+}
+.vi-framework-title {
+  font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--teal); font-family:'Space Mono',monospace; margin-bottom:16px;
+}
+.vi-beats-row {
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+}
+.vi-beat {
+  background:rgba(45,212,191,0.08); border:1px solid rgba(45,212,191,0.2);
+  border-radius:8px; padding:8px 14px;
+}
+.vi-beat-name {
+  font-family:'Bebas Neue',sans-serif; font-size:15px;
+  letter-spacing:0.05em; color:var(--cream); display:block;
+}
+.vi-beat-trigger {
+  font-size:11px; color:var(--teal); opacity:0.8;
+  font-family:'Space Mono',monospace;
+}
+.vi-arrow { color:var(--muted); font-size:16px; line-height:1; }
+.vi-triggers-section { margin-top:18px; }
+.vi-triggers-label {
+  font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--muted); font-family:'Space Mono',monospace; margin-bottom:10px;
+}
+.vi-triggers { display:flex; flex-wrap:wrap; gap:7px; }
+.vi-trigger-tag {
+  background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.2);
+  border-radius:20px; padding:4px 13px;
+  font-size:12px; color:var(--blue);
+}
 
 /* ── INFO BOX ── */
 .info-box {
@@ -758,24 +862,261 @@ body::before {
 .filmed-sub { font-size:17px; color:var(--muted); }
 
 
+/* ── RETURNING USER BANNER ── */
+.returning-banner {
+  display:none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.returning-banner.visible { display:block; }
+.rb-text { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.rb-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.04em; color: var(--cream); margin-bottom: 4px; }
+.rb-sub { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+.rb-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.rb-continue {
+  background: var(--green); color: #000;
+  border: none; border-radius: 8px;
+  padding: 10px 22px; font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.02em;
+}
+.rb-fresh {
+  background: transparent; color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 500;
+  cursor: pointer;
+}
+.rb-continue:hover { filter: brightness(1.08); }
+.rb-fresh:hover { color: var(--cream); border-color: rgba(255,255,255,0.3); }
+
+/* ── WELCOME VALUE PROP ── */
+.welcome-value-prop {
+  font-size: 16px; line-height: 1.6;
+  color: var(--muted); max-width: 520px;
+  margin: 0 auto 28px; text-align: center;
+}
+.welcome-value-prop strong { color: var(--cream); }
+
+/* ── FEATURE LIST ── */
+.feature-list {
+  display: flex; flex-direction: column; gap: 10px;
+  max-width: 520px; margin: 0 auto 32px; width: 100%;
+}
+.feature-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 12px 16px;
+}
+.feature-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; color: var(--green);
+  min-width: 24px; line-height: 1.2;
+}
+.feature-name {
+  font-size: 15px; font-weight: 700; color: var(--cream);
+  margin-bottom: 2px; letter-spacing: 0.01em;
+}
+.feature-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── Q1 UPGRADE ── */
+.q1-progress {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--green);
+  margin-bottom: 14px;
+}
+#screen-1 .choice-card {
+  padding: 28px 20px;
+}
+#screen-1 .card-emoji {
+  font-size: 36px;
+}
+
+/* ── MVO OWN-WAY INPUT ── */
+.mvo-own-way { text-align:center; margin-top:20px; }
+.mvo-own-link {
+  font-size:14px; color:var(--muted);
+  text-decoration:none; border-bottom:1px dashed rgba(255,255,255,0.2);
+}
+.mvo-own-link:hover { color:var(--cream); }
+.mvo-own-field { margin-top:14px; text-align:left; }
+.mvo-own-textarea {
+  width:100%;
+  background:rgba(15,23,42,0.6);
+  border:1.5px solid rgba(45,212,191,0.3);
+  border-radius:10px; padding:16px 18px;
+  color:var(--cream); font-family:inherit;
+  font-size:16px; line-height:1.6;
+  resize:vertical; min-height:80px;
+  margin-bottom:12px;
+}
+.mvo-own-textarea:focus { outline:none; border-color:var(--teal); }
+
+/* ── VIDEO INTRO SCREEN ── */
+.vi-body {
+  font-size:1.05rem;
+  line-height:1.75;
+  color:rgba(255,255,255,0.7);
+  margin-top:1rem;
+  max-width:480px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+
+/* ── SCRIPT TOOLBAR ── */
+.sv-toolbar {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:18px; flex-wrap:wrap; gap:10px;
+}
+.sv-view-toggle {
+  display:flex;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px; overflow:hidden;
+}
+.sv-toggle-btn {
+  background:transparent; color:var(--muted);
+  border:none; padding:8px 18px;
+  font-size:13px; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.06em;
+  cursor:pointer; transition:all 0.2s;
+}
+.sv-toggle-btn.active { background:rgba(45,212,191,0.15); color:var(--teal); }
+.sv-copy-btn {
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:8px; color:var(--muted);
+  padding:8px 16px; font-size:13px; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.06em;
+  cursor:pointer; transition:all 0.2s;
+}
+.sv-copy-btn:hover { color:var(--cream); border-color:rgba(255,255,255,0.35); }
+.sv-copy-btn.copied { color:var(--green); border-color:var(--green); }
+.sv-redo-link {
+  font-size:12px; color:var(--muted); cursor:pointer;
+  text-decoration:none; border-bottom:1px dashed rgba(255,255,255,0.2);
+  letter-spacing:0.02em; white-space:nowrap;
+}
+.sv-redo-link:hover { color:var(--cream); }
+.sv-regen-link {
+  font-size:11px; color:rgba(126,184,212,0.45); cursor:default;
+  letter-spacing:0.03em; font-weight:500;
+  border-bottom:1px dashed rgba(126,184,212,0.2);
+}
+.preface-skip-end {
+  font-size:11px; color:#3a5a70; cursor:pointer;
+  background:none; border:none; padding:0; margin-top:6px;
+  letter-spacing:0.02em; text-decoration:none; display:inline;
+}
+.preface-skip-end:hover { color:#5a8090; }
+
+/* ── SCRIPT BEAT VIEW ── */
+.sv-beats-view { margin-bottom:4px; }
+.sv-beat {
+  margin-bottom:24px; padding-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.sv-beat:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.sv-beat-label {
+  font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.12em;
+  color:var(--green); margin-bottom:6px;
+}
+.sv-beat-desc {
+  font-size:13px; color:var(--muted);
+  line-height:1.5; margin-bottom:10px;
+  font-style:italic;
+}
+.sv-beat-text {
+  font-family:'Playfair Display', serif;
+  font-style:italic; font-size:18px;
+  line-height:1.85; color:var(--cyan);
+}
+
 @media print {
   #progress-bar-wrap,.btn-row,.btn-filmed,.cta-section { display:none!important; }
   .screen { padding:20px; }
   body { background:white; color:black; }
   .plan-vscript-wrap { display:block!important; }
+  .plan-video-row { page-break-inside:avoid; }
+  .pvrow-page-break { page-break-before:always; display:block; height:1px; }
 }
+
+/* ── V1 EPIPHANY BRIDGE LOADING ── */
+.v1-loading-wrap { text-align:center; padding:60px 0 32px; }
+.loading-dots { display:inline-flex; gap:10px; align-items:center; margin-bottom:14px; }
+.ldot { width:10px; height:10px; background:var(--teal); border-radius:50%; animation:ldotpulse 1.2s ease-in-out infinite; }
+.ldot:nth-child(2) { animation-delay:.2s; }
+.ldot:nth-child(3) { animation-delay:.4s; }
+@keyframes ldotpulse { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1.1)} }
+.loading-label { font-size:11px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; display:block; }
+.v1-epiphany { text-align:center; padding:0 8px; margin-top:24px; }
+.epiphany-line {
+  font-family:'Playfair Display',serif; font-style:italic; font-size:18px;
+  color:var(--cyan); line-height:1.8; margin-bottom:14px;
+  opacity:0; transform:translateY(8px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+.epiphany-line.visible { opacity:0.8; transform:translateY(0); }
+.epiphany-line.ep-last {
+  color:var(--teal); font-style:normal;
+  font-family:'DM Sans',sans-serif; font-size:15px; letter-spacing:.04em;
+}
+.epiphany-line.ep-last.visible { opacity:0.9; }
+
+/* ── V1 VIDEO TRACKER ── */
+.v1-tracker {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  gap:6px; margin:28px 0 8px;
+}
+.vt-item {
+  display:flex; flex-direction:column; align-items:center;
+  gap:5px; padding:10px 4px; border-radius:8px; border:1px solid transparent;
+}
+.vt-item .vt-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; text-align:center; }
+.vt-item .vt-status { font-size:11px; font-weight:700; text-align:center; }
+.vt-done { background:rgba(74,222,128,.06); border-color:rgba(74,222,128,.2); }
+.vt-done .vt-label, .vt-done .vt-status { color:var(--green); }
+.vt-done .vt-status { font-size:15px; }
+.vt-next { background:rgba(45,212,191,.07); border-color:rgba(45,212,191,.3); }
+.vt-next .vt-label, .vt-next .vt-status { color:var(--teal); }
+.vt-next .vt-status { font-size:13px; }
+.vt-locked { background:rgba(255,255,255,.02); border-color:rgba(255,255,255,.05); }
+.vt-locked .vt-label { color:rgba(126,184,212,.35); }
+.vt-locked .vt-status { color:rgba(126,184,212,.3); font-size:14px; }
+.vt-skipped { background:rgba(239,68,68,.06); border-color:rgba(239,68,68,.2); }
+.vt-skipped .vt-label { color:#ef4444; }
+.vt-skipped .vt-status { color:#ef4444; font-size:15px; }
+@media(max-width:600px){ .v1-tracker{ grid-template-columns:repeat(4,1fr); } .vt-item .vt-label{ font-size:8px; } }
 </style>
 </head>
 <body>
 
 <div id="progress-bar-wrap">
-  <div class="logo">Build With Bee</div>
-  <div id="progress-track"><div id="progress-fill"></div></div>
-  <div id="progress-label">START</div>
+  <div class="logo">777 Video Challenge</div>
+  <div id="progress-track"><div id="progress-fill"></div><div id="progress-fill-l2"></div></div>
+  <div id="progress-label">PROGRESS</div>
 </div>
+<canvas id="confetti-canvas"></canvas>
 
 <!-- ══ S0 WELCOME ══ -->
 <div class="screen active" id="screen-0">
+
+  <!-- Returning user banner (shown via JS if saved session exists) -->
+  <div class="returning-banner" id="returning-banner">
+    <div class="rb-text">Welcome back</div>
+    <div class="rb-name" id="rb-name-display">👋</div>
+    <div class="rb-sub">You've already made progress — want to pick up where you left off?</div>
+    <div class="rb-btns">
+      <button class="rb-continue" onclick="continueSession()">Continue →</button>
+      <button class="rb-fresh" onclick="dismissBanner()">Start Fresh</button>
+    </div>
+  </div>
+
   <div class="welcome-eyebrow">Build With Bee — 7 Video Challenge</div>
   <h1 class="welcome-title">
     <span class="l1">7 Videos.</span>
@@ -783,6 +1124,7 @@ body::before {
     <span class="l3">Your First Real Audience.</span>
   </h1>
   <p class="welcome-sub">You don't need to go viral. You don't need fancy gear. You just need to show up — and this will get you ready to do exactly that.</p>
+
   <div class="welcome-steps">
     <div class="welcome-step"><div class="slabel">Step 01</div><div class="st">Find your level</div></div>
     <div class="welcome-step"><div class="slabel">Step 02</div><div class="st">Set your goal</div></div>
@@ -797,7 +1139,7 @@ body::before {
 
 <!-- ══ S1 POSTED? ══ -->
 <div class="screen" id="screen-1">
-  <div class="eyebrow">Finding Your Level</div>
+  <div class="q1-progress">Question 1 of 4 — Finding Your Level</div>
   <h2 class="screen-title">Have you ever posted a <span class="accent">short-form video</span> online?</h2>
   <p class="screen-sub">TikTok, Reels, Shorts — anything counts. Even if you deleted it the next day.</p>
   <div class="choice-grid">
@@ -976,32 +1318,6 @@ body::before {
   </div>
 </div>
 
-<!-- ══ S-PREP ══ -->
-<div class="screen" id="screen-prep">
-  <div class="eyebrow">Let's Get Prepped</div>
-  <h2 class="screen-title">One thing before <span class="accent">we start.</span></h2>
-  <p class="screen-sub">David works best when he knows you're starting. A quick message means he'll be watching for your first video and ready to give you feedback when it's up.</p>
-
-  <div class="dm-card">
-    <h3>📣 Let David Know You're In</h3>
-    <p>Send a quick message in the group or by email — just say "I'm starting the 7 video challenge." That's it. He'll take it from there.</p>
-    <div class="dm-options">
-      <a class="dm-btn" href="https://facebook.com/groups/coloradobiz" target="_blank">👥 Find @DavidBeeeee in the Group</a>
-      <a class="dm-btn" href="mailto:contact@DavidBee.me?subject=Starting the 7 Video Challenge&body=Hey David — I'm starting the 7 video challenge!" target="_blank">✉️ Send an Email</a>
-    </div>
-  </div>
-
-  <div class="info-box">
-    💡 Already messaged him? Perfect — move on. He'll see your first video when you post it.
-  </div>
-
-  <div class="btn-row">
-    <button class="btn-primary" onclick="goNext()">Done — Let's Get Camera-Ready</button>
-    <button class="btn-skip" onclick="goNext()">Skip for now — get me camera-ready</button>
-    <button class="btn-back" onclick="goBack()">Back</button>
-  </div>
-</div>
-
 <!-- ══ S-CHECKLIST ══ -->
 <div class="screen" id="screen-checklist">
   <div class="eyebrow">Before You Press Record</div>
@@ -1030,8 +1346,90 @@ body::before {
     </div>
   </div>
   <div class="btn-row">
-    <button class="btn-primary" onclick="startVideos()">I'm Ready — Build My First Script</button>
+    <button class="btn-primary" onclick="goNext()">I'm Ready — Build My First Script</button>
     <button class="btn-back" onclick="goBack()">Back</button>
+  </div>
+</div>
+
+<!-- ══ MVO Q2 — Script 1 mini-wizard ══ -->
+<div class="screen" id="screen-mvo2">
+  <div class="q1-progress" id="mvo2-label">Getting Your Script Ready — Question 1 of 3</div>
+  <h2 class="screen-title" id="mvo2-question"></h2>
+  <div class="choice-grid" id="mvo2-cards"></div>
+  <div class="mvo-own-way">
+    <a href="#" class="mvo-own-link" onclick="toggleMvoOwn(event,'mvo2-own-field')">Say it your own way ↓</a>
+    <div class="mvo-own-field" id="mvo2-own-field" style="display:none;">
+      <textarea class="mvo-own-textarea" id="mvo2-textarea" placeholder=""></textarea>
+      <div class="btn-row"><button class="btn-primary" onclick="confirmMvoOwn(2)">Use This</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MVO Q3 ══ -->
+<div class="screen" id="screen-mvo3">
+  <div class="q1-progress" id="mvo3-label">Getting Your Script Ready — Question 2 of 3</div>
+  <h2 class="screen-title" id="mvo3-question"></h2>
+  <div class="choice-grid" id="mvo3-cards"></div>
+  <div class="mvo-own-way">
+    <a href="#" class="mvo-own-link" onclick="toggleMvoOwn(event,'mvo3-own-field')">Say it your own way ↓</a>
+    <div class="mvo-own-field" id="mvo3-own-field" style="display:none;">
+      <textarea class="mvo-own-textarea" id="mvo3-textarea" placeholder=""></textarea>
+      <div class="btn-row"><button class="btn-primary" onclick="confirmMvoOwn(3)">Use This</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MVO Q4 ══ -->
+<div class="screen" id="screen-mvo4">
+  <div class="q1-progress" id="mvo4-label">Getting Your Script Ready — Question 3 of 3</div>
+  <h2 class="screen-title" id="mvo4-question"></h2>
+  <div class="choice-grid" id="mvo4-cards"></div>
+  <div class="mvo-own-way">
+    <a href="#" class="mvo-own-link" onclick="toggleMvoOwn(event,'mvo4-own-field')">Say it your own way ↓</a>
+    <div class="mvo-own-field" id="mvo4-own-field" style="display:none;">
+      <textarea class="mvo-own-textarea" id="mvo4-textarea" placeholder=""></textarea>
+      <div class="btn-row"><button class="btn-primary" onclick="confirmMvoOwn(4)">Use This</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMMUNICATION LAYERS ══ -->
+<div class="screen" id="screen-comm-layers">
+  <div class="video-progress" id="cl-dots"></div>
+  <div id="cl-result-badge"></div>
+  <div class="q1-progress" id="cl-label">Video 1 of 7</div>
+  <h2 class="screen-title" id="cl-title"></h2>
+  <p class="vi-body" id="cl-body"></p>
+  <div id="cl-framework"></div>
+  <div id="cl-triggers"></div>
+  <div class="v1-tracker" id="tracker-slot-cl"></div>
+  <div class="btn-row" style="margin-top:1.5rem;">
+    <button class="btn-secondary" onclick="goBack()" style="margin-right:10px;">← Back</button>
+    <button class="btn-primary" id="cl-ready-btn" onclick="goNext()">I'm Ready →</button>
+  </div>
+  <div style="text-align:center;margin-top:14px;">
+    <button class="btn-skip" onclick="skipFromPreface(0)">Skip this video →</button>
+    <br><button class="preface-skip-end" onclick="skipToEnd()">skip to the end — see the full plan</button>
+  </div>
+</div>
+
+<!-- ══ VIDEO INTRO SCREEN ══ -->
+<div class="screen" id="screen-video-intro">
+  <div class="video-progress" id="vi-dots"></div>
+  <div id="vi-result-badge"></div>
+  <div class="q1-progress" id="vi-label">Video 1 of 7</div>
+  <h2 class="screen-title" id="vi-title"></h2>
+  <p class="vi-body" id="vi-body"></p>
+  <div id="vi-framework"></div>
+  <div id="vi-triggers"></div>
+  <div class="v1-tracker" id="tracker-slot-vi"></div>
+  <div class="btn-row" style="margin-top:1.5rem;">
+    <button class="btn-secondary" id="vi-back-btn" onclick="backFromVideoIntro()" style="margin-right:10px;">← Back</button>
+    <button class="btn-primary" id="vi-ready-btn" onclick="readyForVideo(0)">I'm Ready →</button>
+  </div>
+  <div style="text-align:center;margin-top:14px;">
+    <button class="btn-skip" id="vi-skip-btn" onclick="skipFromPreface(currentPreviewVideoNum - 1)">Skip this video →</button>
+    <br><button class="preface-skip-end" onclick="skipToEnd()">skip to the end — see the full plan</button>
   </div>
 </div>
 
@@ -1040,6 +1438,20 @@ body::before {
   <div class="eyebrow" id="video-eyebrow">Video 1 of 7</div>
   <div class="video-progress" id="video-dots"></div>
   <div id="video-journal-content"></div>
+  <div class="v1-tracker" id="tracker-slot-journal"></div>
+</div>
+
+<!-- ══ SCRIPT LOADING SCREEN ══ -->
+<div class="screen" id="screen-script-loading">
+  <div class="v1-loading-wrap">
+    <div class="loading-dots">
+      <div class="ldot"></div>
+      <div class="ldot"></div>
+      <div class="ldot"></div>
+    </div>
+    <span class="loading-label">Building your script...</span>
+  </div>
+  <p class="epiphany-line visible" id="script-loading-msg" style="text-align:center;margin-top:32px;padding:0 16px;"></p>
 </div>
 
 <!-- ══ SCRIPT VIEW SCREEN ══ -->
@@ -1047,31 +1459,66 @@ body::before {
   <div class="eyebrow" id="script-eyebrow">Video 1 of 7 — Your Script</div>
   <div class="video-progress" id="script-dots"></div>
 
-  <div class="script-view-card">
-    <div class="sv-header">
-      <div class="video-badge" id="sv-badge">VIDEO 1</div>
-      <div class="sv-title" id="sv-title">I'm Doing This</div>
+  <!-- V1 Epiphany Bridge loading (only shown first time Video 1 script is revealed) -->
+  <div id="v1-loading" style="display:none;">
+    <div class="v1-loading-wrap">
+      <div class="loading-dots">
+        <div class="ldot"></div>
+        <div class="ldot"></div>
+        <div class="ldot"></div>
+      </div>
+      <span class="loading-label">Building your Video 1 script...</span>
     </div>
-    <p class="sv-instruction">This is your script. Read it, tweak any word that doesn't sound like you, then press record. You've got this.</p>
-    <textarea class="script-editor" id="script-editor" rows="8" placeholder="Your script will appear here..."></textarea>
-    <p class="sv-hint">✏️ Edit freely — change any word until it sounds exactly like you.</p>
+    <div class="v1-epiphany">
+      <p class="epiphany-line" id="ep1">I used to think the people who posted every day were just more confident than me.</p>
+      <p class="epiphany-line" id="ep2">Turns out they weren't. They just had something to say before they hit record.</p>
+      <p class="epiphany-line ep-last" id="ep3">Yours is almost ready.</p>
+    </div>
   </div>
 
-  <div class="filmed-card">
-    <div class="filmed-card-inner">
-      <div class="filmed-icon">🎬</div>
-      <div>
-        <div class="filmed-title">Ready when you are.</div>
-        <div class="filmed-sub">Film it, then come back and tap the button below.</div>
+  <!-- Main script content (hidden during V1 loading) -->
+  <div id="script-main-content">
+    <div class="script-view-card">
+      <div class="sv-header">
+        <div class="video-badge" id="sv-badge">VIDEO 1</div>
+        <div class="sv-title" id="sv-title">I'm Doing This</div>
+      </div>
+      <p class="sv-instruction">This is your script. Read it, tweak any word that doesn't sound like you, then press record. You've got this.</p>
+      <div class="sv-toolbar">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="sv-view-toggle">
+            <button class="sv-toggle-btn active" id="sv-guided-btn" onclick="setScriptView('guided')">Guided</button>
+            <button class="sv-toggle-btn" id="sv-clean-btn" onclick="setScriptView('clean')">Clean</button>
+          </div>
+          <span class="sv-redo-link" onclick="redoScript()">redo script</span>
+        </div>
+        <button class="sv-copy-btn" id="sv-copy-btn" onclick="copyScript(this)">📋 Copy Script</button>
+      </div>
+      <div id="sv-beats" class="sv-beats-view"></div>
+      <div id="sv-clean" style="display:none;">
+        <textarea class="script-editor" id="script-editor" rows="8" placeholder="Your script will appear here..."></textarea>
+        <p class="sv-hint">✏️ Edit freely — change any word until it sounds exactly like you.</p>
       </div>
     </div>
-    <button class="btn-filmed" id="btn-filmed-main">✅ I Filmed It!</button>
-    <button class="btn-skip" id="btn-filmed-skip">Skip this one for now</button>
-  </div>
 
-  <div class="btn-row" style="margin-top:8px;">
-    <button class="btn-back" onclick="goBackToPrompts()">← Back to Prompts</button>
-    <button class="btn-skip" style="font-size:14px;color:#4a6a80;" onclick="skipToEnd()">Skip to the end — see my plan</button>
+    <div class="filmed-card">
+      <div class="filmed-card-inner">
+        <div class="filmed-icon">🎬</div>
+        <div>
+          <div class="filmed-title">Ready when you are.</div>
+          <div class="filmed-sub">Film it, then come back and tap the button below.</div>
+        </div>
+      </div>
+      <button class="btn-filmed" id="btn-filmed-main">✅ I Filmed It!</button>
+      <button class="btn-skip" id="btn-filmed-skip">Skip this one for now</button>
+    </div>
+
+    <div class="v1-tracker" id="tracker-slot-script"></div>
+
+    <div class="btn-row" style="margin-top:8px;">
+      <button class="btn-back" onclick="goBackToPrompts()">← Back to Prompts</button>
+      <button class="btn-skip" style="font-size:14px;color:#4a6a80;" onclick="skipToEnd()">Skip to the end — see my plan</button>
+    </div>
   </div>
 </div>
 
@@ -1109,14 +1556,19 @@ body::before {
 const state = {
   posted:null, blocker:null, history:null, business:null,
   goal:null, minigoal:null, minigoalText:'', name:'',
-  level:null, videos:{}
+  level:null, videos:{}, videoStatus:{},
+  mvoQ2:null, mvoQ3:null, mvoQ4:null
 };
 
 let screenOrder = ['screen-0','screen-1'];
 let currentIndex = 0;
 let currentVideoIndex = 0;
+let currentPreviewVideoNum = 1;
 let transitioning = false;
 let editingFromPlan = false;
+let mvoQ2Skipped = false;
+let maxProgressPct = 0;    // L1 blue bar — never decreases
+let maxProgressL2Pct = 0;  // L2 green bar — never decreases
 
 // ── SCREEN NAVIGATION ─────────────────────────────────
 function showScreen(id, direction='forward') {
@@ -1147,8 +1599,8 @@ function goNext() {
 
   if (cur === 'screen-1') {
     screenOrder = state.posted === 'no'
-      ? ['screen-0','screen-1','screen-2a','screen-3','screen-4','screen-5','screen-6','screen-recap','screen-prep','screen-checklist','screen-7','screen-script','plan-screen']
-      : ['screen-0','screen-1','screen-2b','screen-3','screen-4','screen-5','screen-6','screen-recap','screen-prep','screen-checklist','screen-7','screen-script','plan-screen'];
+      ? ['screen-0','screen-1','screen-2a','screen-3','screen-4','screen-5','screen-6','screen-recap','screen-checklist','screen-comm-layers','screen-mvo2','screen-mvo3','screen-mvo4','screen-7','screen-script','plan-screen']
+      : ['screen-0','screen-1','screen-2b','screen-3','screen-4','screen-5','screen-6','screen-recap','screen-checklist','screen-comm-layers','screen-mvo2','screen-mvo3','screen-mvo4','screen-7','screen-script','plan-screen'];
   }
 
   if (cur === 'screen-3') {
@@ -1159,7 +1611,28 @@ function goNext() {
 
   currentIndex++;
   if (currentIndex >= screenOrder.length) currentIndex = screenOrder.length-1;
-  showScreen(screenOrder[currentIndex]);
+  let nextId = screenOrder[currentIndex];
+
+  // Skip screen-mvo2 for Level 1 when onboarding already captured blocker/history
+  if (nextId === 'screen-mvo2' && state.level === 1 && (state.blocker || state.history)) {
+    autoPopulateMvoQ2FromOnboarding();
+    currentIndex++;
+    if (currentIndex >= screenOrder.length) currentIndex = screenOrder.length-1;
+    nextId = screenOrder[currentIndex];
+  }
+
+  if (nextId === 'screen-mvo2') renderMvoScreen(2);
+  else if (nextId === 'screen-mvo3') renderMvoScreen(3);
+  else if (nextId === 'screen-mvo4') renderMvoScreen(4);
+  else if (nextId === 'screen-comm-layers') renderPrefaceV1();
+  else if (nextId === 'screen-7') {
+    currentVideoIndex = 0;
+    buildVideoDots('video-dots');
+    buildVideoDots('script-dots');
+    buildVideoDots('vi-dots');
+    renderVideoPrompts(0);
+  }
+  showScreen(nextId);
 }
 
 function goBack() {
@@ -1182,17 +1655,55 @@ function goToRecapWithNameCheck() {
 }
 
 function goToRecap() {
+  saveProgress();
   populateRecap();
   goNext();
 }
 
 function updateProgress(id) {
-  const total = screenOrder.length - 2;
-  const step = Math.max(0, currentIndex - 1);
-  const pct = total > 0 ? Math.min((step/total)*100, 100) : 0;
-  document.getElementById('progress-fill').style.width = pct+'%';
-  const labels = {'screen-0':'START','screen-7':'PROMPTS','screen-script':'YOUR SCRIPT','screen-recap':'YOUR PROFILE','screen-prep':'PREP','screen-checklist':'PREP','plan-screen':'YOUR PLAN'};
-  document.getElementById('progress-label').textContent = labels[id||screenOrder[currentIndex]] || `STEP ${step} OF ${total}`;
+  const wrap = document.getElementById('progress-bar-wrap');
+  if (wrap.classList.contains('progress-l1-complete') || wrap.classList.contains('progress-l2-complete')) return;
+
+  const videosDone = Object.keys(state.videoStatus).length;
+  const fill   = document.getElementById('progress-fill');
+  const fillL2 = document.getElementById('progress-fill-l2');
+
+  // Small phase bonus within each video's working cycle
+  const phaseBonus = (id === 'screen-comm-layers' || id === 'screen-video-intro') ? 1.5
+                   : id === 'screen-7' ? 3.5
+                   : id === 'screen-script' ? 6 : 0;
+
+  if (state.level === 2) {
+    fill.style.width = '100%';
+    let pct2;
+    if (videosDone === 0) {
+      // Onboarding: green grows 0→15% from screen-4 (index 4) through screen-7
+      const screen7idx = screenOrder.indexOf('screen-7');
+      const startIdx = 4; // screen-4 is always at index 4 in the full screenOrder
+      if (screen7idx > 0 && currentIndex >= startIdx) {
+        pct2 = Math.min(((currentIndex - startIdx) / Math.max(screen7idx - startIdx, 1)) * 15, 15);
+      } else {
+        pct2 = 0;
+      }
+    } else {
+      pct2 = Math.min(15 + (videosDone / 7) * 85 + phaseBonus, 100);
+    }
+    maxProgressL2Pct = Math.max(maxProgressL2Pct, pct2);
+    fillL2.style.width = maxProgressL2Pct + '%';
+    fillL2.style.opacity = maxProgressL2Pct > 0 ? '1' : '0';
+  } else if (state.level === 1 && videosDone > 0) {
+    const pct1 = Math.min((videosDone / 7) * 100 + phaseBonus, 100);
+    maxProgressPct = Math.max(maxProgressPct, pct1);
+    fill.style.width = maxProgressPct + '%';
+  } else {
+    // Onboarding phase: blue bar creeps 0→15% from screen-0 to screen-7
+    const setupEnd = screenOrder.indexOf('screen-7');
+    const setupPct = setupEnd > 0 ? Math.min((currentIndex / setupEnd) * 15, 15) : 0;
+    maxProgressPct = Math.max(maxProgressPct, setupPct);
+    fill.style.width = maxProgressPct + '%';
+  }
+
+  document.getElementById('progress-label').textContent = 'PROGRESS';
 }
 
 // ── AUTO-ADVANCE ───────────────────────────────────────
@@ -1316,137 +1827,294 @@ function populateRecap() {
 const level1Videos = [
   {
     title:"I'm Doing This",
-    note:"No overthinking needed — this one is basically already written for you. Just say it to the camera. One take. Done.",
-    prebuilt:true,
-    script:()=>`Hey — I'm ${state.name||'me'}. I'm going to be posting some videos over the next few days. Stick around.`,
+    note:"These are pre-filled from your earlier answers — edit anything that doesn't sound exactly like you, then generate your script.",
+    beats:()=>compileMvoBeats(),
+    compile:()=>compileMvoBeats().map(b=>b.text).join('\n\n'),
     prompts:[]
   },
   {
-    title:"About Me",
-    note:"Three simple things about who you are. That's your whole video. The simpler the better — don't try to be interesting, just be real.",
+    title:"The Turning Point",
+    note:"People don't follow creators because of what they do — they follow them because of why they started. Give your audience the honest moment everything shifted. That's what turns a viewer into a follower.",
     prompts:[
-      {label:"I'm from ___",hint:"Where you grew up or where you live now — wherever feels most like home.",key:"v1p0",ph:"e.g. originally from Texas, living in Denver now"},
-      {label:"One thing most people don't know about me is ___",hint:"Something a little unexpected. Not a fun fact — something real.",key:"v1p1",ph:"e.g. I used to be a professional dog trainer before I got into marketing"},
-      {label:"I'm on here because ___",hint:"The honest reason. What finally made you decide to start?",key:"v1p2",ph:"e.g. I got tired of watching everyone else post and doing nothing myself"}
+      {label:"The moment that finally made me decide to start was ___",hint:"What was the real catalyst? Not the polished story — the actual thing that happened.",key:"v1p0",ph:"e.g. I watched someone with less experience than me doing exactly what I'd been too afraid to do and I realized I'd been waiting for permission no one was going to give me"},
+      {label:"The honest truth about what was holding me back was ___",hint:"The internal conflict. What were you actually afraid of or believing?",key:"v1p1",ph:"e.g. I kept telling myself I wasn't ready, but the truth was I was scared of being judged by people who already knew me"},
+      {label:"What I tried before that didn't work was ___",hint:"A failed attempt or wrong approach. Shows you tried, makes you real.",key:"v1p2",ph:"e.g. I tried scripting everything perfectly and it made me sound like a robot, so I stopped and never posted any of it"},
+      {label:"What finally shifted everything was realizing ___",hint:"The decision or realization that actually moved you to start.",key:"v1p3",ph:"e.g. that the people I wanted to reach couldn't find me if I wasn't showing up — so my silence wasn't protecting me, it was just hiding me"}
     ],
-    compile:v=>`My name is ${state.name||'___'}, and I'm from ${v.v1p0||'___'}. One thing most people don't know about me is ${v.v1p1||'___'}. I'm on here because ${v.v1p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Catalyst Moment)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to tell you something I have not said out loud before.'},
+      {label:'THE INTERNAL CONFLICT (Vulnerability Entry)',   desc:'The honest internal struggle — the conflict you faced before you made the decision to move.',
+                                  text:`The moment that finally made me decide to start was ${v.v1p0||'___'}.`},
+      {label:'THE FALSE SOLUTION (Enemy Identification)',      desc:'The thing that didn\'t work — the wrong path that showed you what the real problem was.',
+                                  text:`The honest truth about what was holding me back? ${v.v1p1||'___'}. I had tried ${v.v1p2||'___'}.`},
+      {label:'THE DECISION TO SHOW UP (Agency Reclaim / Path Clarity)',    desc:'The moment you stopped waiting and chose to act — the reframe that gave you agency back.',
+                                  text:`What finally shifted everything was realizing ${v.v1p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'The next video is about what happened after that. Stay with me.'}
+    ],
+    compile:v=>`The moment that finally made me decide to start was ${v.v1p0||'___'}. The honest truth about what was holding me back? ${v.v1p1||'___'}. I had tried ${v.v1p2||'___'}. What finally shifted everything was realizing ${v.v1p3||'___'}.`
   },
   {
-    title:"Epiphany #1",
-    note:"Something you used to believe — until something changed your mind. This is the type of content that makes people stop scrolling and actually listen.",
+    title:"The First Epiphany",
+    note:"Every person watching you held some version of the belief you're about to challenge. One honest reframe, told through your real experience, is what builds intellectual trust.",
     prompts:[
-      {label:"Something I used to believe was ___",hint:"A belief you held that you now know was wrong, incomplete, or limiting.",key:"v2p0",ph:"e.g. that you needed to be an expert before you could share anything online"},
-      {label:"But then ___ happened and I realized ___",hint:"What was the moment or experience that shifted your thinking?",key:"v2p1",ph:"e.g. I watched someone with half my experience build a huge audience just by being honest"},
-      {label:"Now I believe ___",hint:"The thing you believe now. Say it with conviction.",key:"v2p2",ph:"e.g. that people don't follow expertise — they follow someone they can relate to"}
+      {label:"I used to believe ___",hint:"The old belief — what you genuinely thought before. The more specific, the better.",key:"v2p0",ph:"e.g. I used to believe you had to be an expert before you could share anything online, or people would see right through you"},
+      {label:"The thing that started to crack that belief was ___",hint:"The evidence or moment that made you question it. Small is fine — just real.",key:"v2p1",ph:"e.g. the thing that cracked it was watching someone who knew less than me get massive engagement just by being honest about their struggle"},
+      {label:"The moment I actually saw it differently was ___",hint:"The realization — when it clicked. What happened or what did you realize?",key:"v2p2",ph:"e.g. the moment I saw it differently was when a comment from a total stranger said I needed to hear this on a video I almost didn't post"},
+      {label:"Now I believe ___",hint:"Your new belief. The one your audience might need permission to hold.",key:"v2p3",ph:"e.g. now I believe the right people don't need you to be an expert — they need you to be honest about being a few steps ahead of them"}
     ],
-    compile:v=>`Something I used to believe was ${v.v2p0||'___'}. But then ${v.v2p1||'___'}. Now I believe ${v.v2p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Pattern Break)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I used to think something that was quietly keeping me stuck. And I am going to tell you exactly what it was.'},
+      {label:'THE STRUGGLE STORY (Discovery Arc)',     desc:'The honest story of the belief you held — and how it limited you before you discovered something better.',
+                                  text:`I used to believe ${v.v2p0||'___'}.`},
+      {label:'THE "AHA" MOMENT (Cognitive Reframe)',      desc:'The crack in the old belief — the real moment when a new understanding started to emerge.',
+                                  text:`The thing that started to crack that belief was ${v.v2p1||'___'}. The moment I actually saw it differently: ${v.v2p2||'___'}.`},
+      {label:'THE COST OF STAYING INVISIBLE (Cost Revelation / Simplicity Signal)',       desc:'The new belief and what it makes possible — the cost of not making this shift.',
+                                  text:`Now I believe ${v.v2p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video I am going to show you how this actually changed the way I show up. Worth watching.'}
+    ],
+    compile:v=>`I used to believe ${v.v2p0||'___'}. The thing that started to crack that belief was ${v.v2p1||'___'}. The moment I actually saw it differently: ${v.v2p2||'___'}. Now I believe ${v.v2p3||'___'}.`
   },
   {
-    title:"I'm Still Doing This",
-    note:"A quick check-in. You've already done 3 videos — that's more than most people ever do. What surprised you?",
+    title:"The Progress Signal",
+    note:"Most people disappear after their first few videos. You're still here — and that matters more than you think. Share where you actually are and why you're still going.",
     prompts:[
-      {label:"The thing I didn't expect about doing this was ___",hint:"Be honest — good surprise or bad surprise, it's all content.",key:"v3p0",ph:"e.g. that I actually didn't hate watching myself back as much as I thought I would"}
+      {label:"Where I am right now, honestly, is ___",hint:"The honest check-in. Not a highlight — where you genuinely are in the process.",key:"v3p0",ph:"e.g. where I am right now, honestly, is further along than I expected but still uncomfortable in ways I didn't anticipate"},
+      {label:"What I didn't expect to face was ___",hint:"The surprise — what's actually been hard, weird, or different than you imagined?",key:"v3p1",ph:"e.g. what I didn't expect to face was the voice in my head that kept telling me no one was watching so why was I doing this"},
+      {label:"Because of that, I had to adjust ___",hint:"What you changed, adapted, or learned because of that challenge.",key:"v3p2",ph:"e.g. I had to adjust my expectations — I stopped caring about views and started caring about whether the content was actually honest"},
+      {label:"The reason I'm still going is ___",hint:"Your commitment. Why does this still matter to you?",key:"v3p3",ph:"e.g. the reason I'm still going is that I made a commitment — not to the camera, but to the version of myself that finally decided to stop hiding"}
     ],
-    compile:v=>`I'm back. ${v.v3p0||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Momentum Validation)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I am still here. And I want to be honest with you about what that has actually been like.'},
+      {label:'THE EXPERIENCE SO FAR (Small Win Proof)',   desc:'The honest check-in — where you are right now and the small wins worth acknowledging.',
+                                  text:`Where I am right now, honestly: ${v.v3p0||'___'}.`},
+      {label:'THE REALITY OF THE WORK (Real-Time Transparency)',      desc:'The unexpected challenge — being transparent about what the work actually looks like.',
+                                  text:`What I didn't expect to face was ${v.v3p1||'___'}. Because of that, I had to adjust ${v.v3p2||'___'}.`},
+      {label:'THE FORWARD SHIFT (Social Evidence)',       desc:'Why you\'re still going — the evidence that this is worth staying with.',
+                                  text:`The reason I am still going? ${v.v3p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video I am going to say something I have not heard many people in this space say. Do not miss it.'}
+    ],
+    compile:v=>`Where I am right now, honestly: ${v.v3p0||'___'}. What I didn't expect to face was ${v.v3p1||'___'}. Because of that, I had to adjust ${v.v3p2||'___'}. The reason I'm still going? ${v.v3p3||'___'}.`
   },
   {
-    title:"About Me — Take 2",
-    note:"You've warmed up. Go a little deeper this time. The second version of this video is almost always better than the first — because you've stopped trying so hard.",
+    title:"The Second Epiphany",
+    note:"You've shown up, shared your story, and kept going. Now it's time to plant your flag. Share the conviction most people in your world have backwards — and why you believe what you believe.",
     prompts:[
-      {label:"Something I didn't mention last time is ___",hint:"Something more personal or specific — something you were maybe a little afraid to say.",key:"v4p0",ph:"e.g. that I spent 12 years in a job I hated before I finally decided to change everything"},
-      {label:"The thing I actually want to be known for is ___",hint:"Not your job title — the impact you want to have on someone who watches you.",key:"v4p1",ph:"e.g. helping people realize they're already interesting — they just don't know it yet"}
+      {label:"Something most people in [your world] say is ___",hint:"The conventional wisdom — what everyone repeats. You've heard it a hundred times.",key:"v4p0",ph:"e.g. something most people in the creator space say is that you need to post every day to beat the algorithm"},
+      {label:"I used to believe that too, because ___",hint:"Be honest — show you weren't always different. What made this idea seem true to you?",key:"v4p1",ph:"e.g. I used to believe it too, because every piece of advice I read said consistency was the only way to grow"},
+      {label:"But what actually changed my mind was ___",hint:"The real evidence that shifted you. Something you experienced or observed.",key:"v4p2",ph:"e.g. but what actually changed my mind was seeing creators with less frequency and more honesty outgrow people who were grinding daily"},
+      {label:"So what I actually believe now is ___",hint:"Your real stance. The belief your audience might be waiting for permission to hold.",key:"v4p3",ph:"e.g. so what I actually believe now is that clarity beats volume — one honest video a week will do more than seven forgettable ones"}
     ],
-    compile:v=>`Something I didn't mention last time is ${v.v4p0||'___'}. The thing I actually want to be known for is ${v.v4p1||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Sacred Cow Slaughter)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to say something that most people in this space will not say. Stay with me for sixty seconds.'},
+      {label:'THE FALSE BELIEF (Logic Re-stack)',     desc:'The conventional wisdom — the shared belief that has been quietly holding people back.',
+                                  text:`Something most people say is ${v.v4p0||'___'}. I used to believe that too — ${v.v4p1||'___'}.`},
+      {label:'THE NEW REALIZATION (Paradigm Break)',      desc:'The evidence that shifted the belief — the moment you saw it differently.',
+                                  text:`But what actually changed my mind was ${v.v4p2||'___'}.`},
+      {label:'THE FUTURE SELF (Status Shift / Natural Invitation)',       desc:'The new belief and what it makes possible — who you become when you stop holding the old one.',
+                                  text:`So what I actually believe now? ${v.v4p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video I am going to get honest about something more personal. I think it will land differently than anything I have shared so far.'}
+    ],
+    compile:v=>`Something most people say is ${v.v4p0||'___'}. I used to believe that too — ${v.v4p1||'___'}. But what actually changed my mind was ${v.v4p2||'___'}. So what I actually believe now? ${v.v4p3||'___'}.`
   },
   {
-    title:"Epiphany #2",
-    note:"A belief you hold that most people around you don't share. You don't need to be controversial — just honest. Honesty is what makes people feel less alone.",
+    title:"Why I'm Here",
+    note:"Your audience is starting to get you. Now they need to understand what you actually want for them. Connect your story to their possibility — without pitching anything.",
     prompts:[
-      {label:"A lot of people think ___ but I genuinely believe ___",hint:"What's the conventional wisdom in your world that you disagree with?",key:"v5p0",ph:"e.g. a lot of people think you need a big following before anyone will listen — but I believe one honest video reaches the right person"},
-      {label:"Here's why that matters to me ___",hint:"Make it personal. Why does this belief mean something to you specifically?",key:"v5p1",ph:"e.g. because I spent two years waiting to be 'ready' and it was the biggest waste of time"}
+      {label:"The deeper reason I'm doing this — beyond content — is ___",hint:"What's actually driving you. Not the business goal, the human one.",key:"v5p0",ph:"e.g. the deeper reason I'm doing this is that I spent years watching people who looked like me decide they weren't the right type of person to be seen, and I don't want to be one of them anymore"},
+      {label:"The person I most want to reach is ___",hint:"Be specific — describe one person. Who are they, and what are they going through?",key:"v5p1",ph:"e.g. the person I most want to reach is someone who has something real to say but keeps waiting to feel qualified enough to say it"},
+      {label:"What I actually want for them is ___",hint:"The transformation. Not the result you promise — the one you genuinely care about.",key:"v5p2",ph:"e.g. what I actually want for them is to feel what I felt the first time someone said this helped me — because that changes how you see yourself"},
+      {label:"So if that person is watching — here's my honest invitation: ___",hint:"A soft, real open door for the right person. No pressure, just genuine.",key:"v5p3",ph:"e.g. if that person is watching — follow along. I'm not promising overnight results, but I am promising I'll keep showing up honestly, and I think that's actually worth something"}
     ],
-    compile:v=>`A lot of people think ${v.v5p0||'___'}. Here's why that matters to me: ${v.v5p1||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Identity Call-to-Arms)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to talk about the real reason I am making these videos. Not the polished version — the actual one.'},
+      {label:'THE INTERNAL VALUES (Shared Values)',   desc:'The deeper reason you\'re here — the values driving this work beyond content goals.',
+                                  text:`The deeper reason I am doing this — beyond content — is ${v.v5p0||'___'}.`},
+      {label:'WHO THIS IS FOR (Polarization)',     desc:'The specific person you\'re making this for — polarizing clearly so the right person feels truly seen.',
+                                  text:`The person I most want to reach is ${v.v5p1||'___'}. What I actually want for them is ${v.v5p2||'___'}.`},
+      {label:'THE PERSONAL MISSION (Ethical Bridge)',desc:'Your honest invitation — the open door for the right person, without pressure.',
+                                  text:`So if that is you — ${v.v5p3||'___'}.`},
+      {label:'THE INVITATION (Ethical Bridge)',desc:'Closes in a way that starts a relationship, not just a view — plants the reason to come back.',
+                                  text:'Follow along. I will be here for the next one.'}
+    ],
+    compile:v=>`The deeper reason I'm doing this — beyond content — is ${v.v5p0||'___'}. The person I most want to reach is ${v.v5p1||'___'}. What I actually want for them is ${v.v5p2||'___'}. So if that's you — ${v.v5p3||'___'}.`
   },
   {
     title:"What I Learned",
-    note:"The final video. Reflect honestly — this one tends to be the most powerful because you've actually done something real. People love watching someone grow in real time.",
+    note:"You started as someone deciding to show up. You're finishing as someone who did. That arc is the story. Close it honestly and leave one open door for the right person.",
     prompts:[
-      {label:"When I started I thought ___",hint:"Your honest expectation going in — even if it was completely wrong.",key:"v6p0",ph:"e.g. that I'd hate every second of this"},
-      {label:"What actually happened was ___",hint:"The real experience. What surprised you most?",key:"v6p1",ph:"e.g. that it got easier way faster than I expected"},
-      {label:"If you're thinking about doing something like this, here's what I'd tell you ___",hint:"The one piece of advice you'd give someone exactly where you were 7 videos ago.",key:"v6p2",ph:"e.g. just do Video 1. The rest takes care of itself."}
+      {label:"When I started this challenge, I was someone who ___",hint:"The honest before. Who were you — not in a dramatic way, just truthfully?",key:"v6p0",ph:"e.g. when I started this challenge, I was someone who had been meaning to start for two years and had found every reason not to"},
+      {label:"What this actually did was ___",hint:"The real result — inside and out. What changed, shifted, or surprised you?",key:"v6p1",ph:"e.g. what this actually did was prove to me that I'm capable of following through when I decide to, and that the hardest step really was the first one"},
+      {label:"The thing I didn't see coming was ___",hint:"The unexpected lesson. What surprised you that you'd want the next person to know?",key:"v6p2",ph:"e.g. the thing I didn't see coming was how much it changed how I talk about myself offline — I started believing the version of me I was putting on screen"},
+      {label:"If you're someone who [situation] — here's the door I'm leaving open: ___",hint:"Your final invitation. Talk to one specific person. What are you offering?",key:"v6p3",ph:"e.g. if you're someone who's been watching and wondering if this could work for you — it can, and I'd love to show you how. Follow me for what comes next."}
     ],
-    compile:v=>`When I started I thought ${v.v6p0||'___'}. What actually happened was ${v.v6p1||'___'}. If you're thinking about doing something like this — ${v.v6p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Full Circle Loop)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'Seven videos. I made it. And I want to be honest with you about what that actually means.'},
+      {label:'THE INTERNAL SHIFT (New Normal Declaration)',    desc:'The honest before/after — who you were when you started and how this changed you.',
+                                  text:`When I started this, I was someone who ${v.v6p0||'___'}. What this actually did: ${v.v6p1||'___'}.`},
+      {label:'THE FINAL LESSON (Authority Affirmation)',     desc:'The unexpected insight — what surprised you and what you\'d want the next person to know.',
+                                  text:`The thing I didn't see coming was ${v.v6p2||'___'}.`},
+      {label:'THE NEW CHAPTER (Unfolding Horizon)',desc:'Your honest final invitation — the open door for exactly the right person.',
+                                  text:`${v.v6p3||'___'}.`}
+    ],
+    compile:v=>`When I started this, I was someone who ${v.v6p0||'___'}. What this actually did: ${v.v6p1||'___'}. The thing I didn't see coming was ${v.v6p2||'___'}. ${v.v6p3||'___'}.`
   }
 ];
 
 const level2Videos = [
   {
     title:"I'm Doing This",
-    note:"Frame it around your intention. What are you here to prove? Make it specific enough that the right person watches and thinks 'that's for me.'",
-    prompts:[
-      {label:"I'm doing this because I want to show that ___",hint:"The belief or idea you want to demonstrate through this challenge.",key:"v0p0",ph:"e.g. you don't have to be a flashy influencer to build real trust online"}
-    ],
-    compile:v=>`Hey — I'm ${state.name||'___'}. I'm doing a video challenge to prove that ${v.v0p0||'___'}. Follow along.`
+    note:"These are pre-filled from your earlier answers — edit anything that doesn't sound exactly like you, then generate your script.",
+    beats:()=>compileMvoBeats(),
+    compile:()=>compileMvoBeats().map(b=>b.text).join('\n\n'),
+    prompts:[]
   },
   {
-    title:"About My Business",
-    note:"Clear, simple, specific. Who do you help and what changes for them? Say it like you're explaining it to a smart friend over coffee — no jargon.",
+    title:"The Origin Story",
+    note:"Your audience doesn't just want to buy from you — they want to understand you. This video answers the question they're already asking: why did you build this, and why should I trust you?",
     prompts:[
-      {label:"I help ___ do ___ without ___",hint:"Fill this in simply — not a marketing statement, a real description.",key:"v1p0",ph:"e.g. I help new coaches get their first clients without spending money on ads"},
-      {label:"I got into this because ___",hint:"The real story. Why this work, why now, why you specifically?",key:"v1p1",ph:"e.g. I spent years figuring this out the hard way and didn't want others to do the same"},
-      {label:"The thing that makes my approach different is ___",hint:"Not a feature — a philosophy. What do you do that most people in your space don't?",key:"v1p2",ph:"e.g. I actually build things with you instead of just telling you what to do"}
+      {label:"Before I built this, the problem I kept seeing was ___",hint:"The gap you noticed in the market or in your clients' lives. What was broken or missing?",key:"v1p0",ph:"e.g. before I built this, the problem I kept seeing was brilliant people with real expertise who had no idea how to talk about what they do in a way that made anyone care"},
+      {label:"The moment I decided to do something about it was ___",hint:"The specific moment or event that moved you from frustrated to building.",key:"v1p1",ph:"e.g. the moment I decided to do something about it was when a client of mine tripled her rates just by changing how she described her work — and I realized the problem was never the work, it was always the words"},
+      {label:"What made it hard to start was ___",hint:"The real friction — doubt, risk, or something you had to overcome.",key:"v1p2",ph:"e.g. what made it hard to start was that I wasn't sure anyone would take me seriously when I didn't have a massive following or a fancy website"},
+      {label:"What I decided to build — and why — was ___",hint:"What you actually created, and the real reason behind it.",key:"v1p3",ph:"e.g. what I decided to build was a simple, repeatable system — because the problem was never a lack of talent, it was always a lack of clarity about how to communicate it"}
     ],
-    compile:v=>`I help ${v.v1p0||'___'}. I got into this because ${v.v1p1||'___'}. What makes my approach different is ${v.v1p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Catalyst Moment)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to tell you why I built this. Not the elevator pitch version — the real one.'},
+      {label:'THE INDUSTRY FRUSTRATION (Vulnerability Entry)',   desc:'The honest problem you kept seeing — the frustration that was the real catalyst for building this.',
+                                  text:`Before I built this, the problem I kept seeing was ${v.v1p0||'___'}.`},
+      {label:'THE BROKEN METHOD (Enemy Identification)',      desc:'The moment you decided to act — naming the broken method or missing solution that made your approach necessary.',
+                                  text:`The moment I decided to do something about it: ${v.v1p1||'___'}. What made it hard to start was ${v.v1p2||'___'}.`},
+      {label:'THE DECISION TO INNOVATE (Agency Reclaim / Path Clarity)',       desc:'What you built and why — the deliberate decision to create something better.',
+                                  text:`So what I decided to build — and why — was ${v.v1p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video I am going to challenge something my industry treats as settled. Stay with me for that one.'}
+    ],
+    compile:v=>`Before I built this, the problem I kept seeing was ${v.v1p0||'___'}. The moment I decided to do something about it: ${v.v1p1||'___'}. What made it hard to start was ${v.v1p2||'___'}. So what I decided to build — and why — was ${v.v1p3||'___'}.`
   },
   {
-    title:"Epiphany #1 — Challenge a Belief",
-    note:"What does your industry get wrong? This is where you plant your flag. You're not trying to be controversial — you're trying to be honest about something most people won't say.",
+    title:"The First Epiphany",
+    note:"Your audience has been told things that aren't working for them. One clear reframe, backed by what you've actually seen, is what makes people think: this person gets it.",
     prompts:[
-      {label:"Most people in [your space] believe ___",hint:"The conventional wisdom — the thing everyone says that you've seen fail.",key:"v2p0",ph:"e.g. most coaches believe you need a huge audience before you can charge premium rates"},
-      {label:"But here's what I've actually seen happen ___",hint:"A real example — something you've witnessed that contradicts the conventional wisdom.",key:"v2p1",ph:"e.g. I've watched people with 200 followers close $5k clients by being specific"},
-      {label:"The shift that changes everything is ___",hint:"Your reframe. The new belief you're offering instead.",key:"v2p2",ph:"e.g. stop trying to reach everyone and start deeply resonating with 10 specific people"}
+      {label:"The thing most people in my industry believe is ___",hint:"The conventional wisdom — the thing that gets repeated constantly that you've seen fail.",key:"v2p0",ph:"e.g. the thing most people in my industry believe is that you need to be on every platform and post every day to grow"},
+      {label:"Here's what I've actually seen happen instead ___",hint:"A real example — something you've witnessed or experienced that contradicts the myth.",key:"v2p1",ph:"e.g. here's what I've actually seen: the people getting the best results are doing less but being far more intentional about who they're talking to"},
+      {label:"The way I actually see it is ___",hint:"Your reframe. Not a rant — a genuinely better lens on the problem.",key:"v2p2",ph:"e.g. the way I actually see it is that volume is a strategy for people without a message — specificity is the strategy for everyone else"},
+      {label:"When someone truly understands this, what becomes possible is ___",hint:"The transformation. What opens up for someone who adopts your view?",key:"v2p3",ph:"e.g. when someone truly understands this, they stop trying to reach everyone and start building real trust with the people who actually matter to their business"}
     ],
-    compile:v=>`Most people in my space believe ${v.v2p0||'___'}. But here's what I've actually seen: ${v.v2p1||'___'}. The shift that changes everything is ${v.v2p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Pattern Break)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to challenge something my industry treats as common sense. This might be a bit uncomfortable.'},
+      {label:'THE RESEARCH/WORK STORY (Discovery Arc)',     desc:'The conventional story — what the industry repeats and why it has failed the people you serve.',
+                                  text:`The thing most people in my industry believe is ${v.v2p0||'___'}. Here is what I have actually seen happen: ${v.v2p1||'___'}.`},
+      {label:'THE NEW INSIGHT (Cognitive Reframe)',      desc:'Your better lens — the reframe that changes how someone thinks about the whole problem.',
+                                  text:`The way I actually see it is ${v.v2p2||'___'}.`},
+      {label:'THE COST OF THE WRONG METHOD (Cost Revelation / Simplicity Signal)',       desc:'What becomes possible when someone understands the better way — and what it costs to keep the old one.',
+                                  text:`When someone truly understands this, ${v.v2p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video I am going to give you something actually useful — something most people in my space would charge for. Worth coming back for.'}
+    ],
+    compile:v=>`The thing most people in my industry believe is ${v.v2p0||'___'}. Here's what I've actually seen happen: ${v.v2p1||'___'}. The way I actually see it is ${v.v2p2||'___'}. When someone truly understands this, ${v.v2p3||'___'}.`
   },
   {
-    title:"Mini Teaching Video",
-    note:"Teach one thing. Make it the most useful 60 seconds you can share. One idea, fully explained — not a tip list.",
+    title:"The Teaching Moment",
+    note:"This is where you demonstrate real value — not by talking about what you offer, but by actually giving something useful. One insight, explained simply, proves your expertise better than any testimonial.",
     prompts:[
-      {label:"The one thing I wish every [your audience] knew is ___",hint:"One single insight that would genuinely change how they see something — not a list.",key:"v3p0",ph:"e.g. the one thing I wish every new entrepreneur knew is that your first offer doesn't have to be perfect"},
-      {label:"Here's the simplest way to explain it ___",hint:"Pretend you're explaining it to someone smart who knows nothing about your industry.",key:"v3p1",ph:"e.g. think of your first offer like a first date — it's about connection, not commitment"},
-      {label:"When someone actually applies this, what usually happens is ___",hint:"The result. What changes for someone who gets this?",key:"v3p2",ph:"e.g. they stop waiting and start having real conversations — and those conversations become clients"}
+      {label:"The one thing I wish every [your audience] understood is ___",hint:"One single insight that would genuinely change how they see or approach something.",key:"v3p0",ph:"e.g. the one thing I wish every service provider understood is that your offer isn't what you do — it's what changes for the client after you do it"},
+      {label:"Here's the simplest way I can explain it ___",hint:"Break it down like you're talking to someone smart who's brand new to your space.",key:"v3p1",ph:"e.g. here's the simplest way to explain it: most people describe their work in terms of what they deliver. The ones who grow fastest describe it in terms of what the client gains"},
+      {label:"The mistake people make when they miss this is ___",hint:"What happens when someone doesn't understand this? What goes wrong?",key:"v3p2",ph:"e.g. the mistake people make when they miss this is they keep lowering their prices hoping that's the problem, when the real issue is no one understands what they're actually buying"},
+      {label:"When someone actually applies this, what usually changes is ___",hint:"The result. What does applying this actually look like in practice?",key:"v3p3",ph:"e.g. when someone actually applies this, their sales conversations completely change — because now they're speaking the language of outcomes, not effort"}
     ],
-    compile:v=>`${v.v3p0||'___'}. Here's the simplest way to think about it: ${v.v3p1||'___'}. When people apply this, ${v.v3p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Momentum Validation)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I am going to give you something actually useful in the next sixty seconds. No pitch. Just the thing.'},
+      {label:'THE LIVE DEMONSTRATION (Expert Ease)',   desc:'The core insight — the thing you wish every person in your space understood, explained simply.',
+                                  text:`The one thing I wish every person in my space understood is ${v.v3p0||'___'}. Here is the simplest way I can explain it: ${v.v3p1||'___'}.`},
+      {label:'THE SPECIFIC RESULT (Small Win Proof)',       desc:'What applying this actually looks like — the concrete result someone can expect.',
+                                  text:`When someone actually applies this, ${v.v3p3||'___'}.`},
+      {label:'THE CLIENT EVIDENCE (Social Evidence)',      desc:'The cost of missing this insight — the mistake people keep making without this knowledge.',
+                                  text:`The mistake people make when they miss this is ${v.v3p2||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video is personal. I am going to share a mistake I made in my work — and what it cost me. Worth coming back for.'}
+    ],
+    compile:v=>`The one thing I wish every person in my space understood is ${v.v3p0||'___'}. Here's the simplest way I can explain it: ${v.v3p1||'___'}. The mistake people make when they miss this is ${v.v3p2||'___'}. When someone actually applies this, ${v.v3p3||'___'}.`
   },
   {
-    title:"Epiphany #2 — More Personal",
-    note:"A mistake you used to make in your own work — and the lesson you learned the hard way. The more specific and honest this is, the more it resonates.",
+    title:"The Second Epiphany",
+    note:"A mistake you made, the lesson it cost you, and how it changed how you work — that combination creates something testimonials can't: genuine trust in your judgment.",
     prompts:[
-      {label:"I used to [common mistake] until ___",hint:"Something you genuinely did wrong — the more specific the better.",key:"v4p0",ph:"e.g. I used to build every client a complicated funnel until I realized most just needed someone to talk to"},
-      {label:"What I realized was ___",hint:"The lesson. Say it plainly.",key:"v4p1",ph:"e.g. simplicity converts better than sophistication almost every single time"},
-      {label:"Now when I work with someone I always start with ___",hint:"What changed in your practice because of this lesson?",key:"v4p2",ph:"e.g. one honest conversation about what they're actually afraid of"}
+      {label:"A mistake I used to make in my work was ___",hint:"Something specific — not vague. The more real and specific, the more it lands.",key:"v4p0",ph:"e.g. a mistake I used to make in my work was trying to give every client the same process, regardless of where they actually were"},
+      {label:"At the time I believed ___",hint:"What were you thinking? What made this approach seem right?",key:"v4p1",ph:"e.g. at the time I believed having a consistent system was the professional move — I thought it showed I knew what I was doing"},
+      {label:"What I actually learned was ___",hint:"The real lesson — plain and honest.",key:"v4p2",ph:"e.g. what I actually learned was that the system was serving my ego, not my clients — and the best results came when I actually listened first"},
+      {label:"How it changed the way I work is ___",hint:"The practical shift. What do you do differently now because of this?",key:"v4p3",ph:"e.g. how it changed the way I work is that I now spend the first session doing nothing but asking questions — and that alone has been the single biggest driver of results for my clients"}
     ],
-    compile:v=>`I used to ${v.v4p0||'___'}. What I realized was ${v.v4p1||'___'}. Now when I work with someone, I always start with ${v.v4p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Sacred Cow Slaughter)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to tell you about a mistake I made in my work. A real one. Not a humble-brag — an actual miss.'},
+      {label:'THE INDUSTRY MYTH (Logic Re-stack)',     desc:'The conventional approach — the mistake you made because it\'s what everyone believes.',
+                                  text:`A mistake I used to make in my work was ${v.v4p0||'___'}. At the time, I believed ${v.v4p1||'___'}.`},
+      {label:'THE BETTER WAY (Paradigm Break)',      desc:'What you actually learned — the paradigm shift that changed your whole approach.',
+                                  text:`What I actually learned was ${v.v4p2||'___'}.`},
+      {label:'THE NATURAL SOLUTION (Status Shift / Natural Invitation)',       desc:'How this changed how you work — the practical shift that your clients now benefit from.',
+                                  text:`How it changed the way I work: ${v.v4p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Next video I am walking you through exactly what it looks like to work with me. The real process, not the pitch.'}
+    ],
+    compile:v=>`A mistake I used to make in my work was ${v.v4p0||'___'}. At the time, I believed ${v.v4p1||'___'}. What I actually learned was ${v.v4p2||'___'}. How it changed the way I work: ${v.v4p3||'___'}.`
   },
   {
-    title:"About My Process",
-    note:"Walk people through what it actually feels like to work with you — without pitching. Show the transformation without selling it.",
+    title:"How I Actually Work",
+    note:"People don't buy outcomes — they buy confidence in the process that gets them there. Walk your audience through what it feels like to work with you, without pitching anything.",
     prompts:[
-      {label:"When someone comes to me they're usually dealing with ___",hint:"Their emotional reality — not a problem statement, but how they're actually feeling.",key:"v5p0",ph:"e.g. a business that's working but not growing, and they can't figure out why"},
-      {label:"The first thing we do together is ___",hint:"Your actual first step — what happens in the first conversation or first week?",key:"v5p1",ph:"e.g. we strip everything back and figure out what's actually worth keeping"},
-      {label:"By the end they typically ___",hint:"The transformation — what's different for them on the other side?",key:"v5p2",ph:"e.g. have more clarity and momentum in a week than they had in the previous six months"}
+      {label:"When someone comes to me, they're usually dealing with ___",hint:"Their emotional reality — not a problem statement, but how they're actually feeling when they arrive.",key:"v5p0",ph:"e.g. when someone comes to me, they're usually dealing with the feeling that they're doing everything right and still not moving — there's a specific kind of exhaustion that comes with that"},
+      {label:"The first thing we actually do together is ___",hint:"Your real first step. Not the pitch version — what literally happens in the first conversation or first week.",key:"v5p1",ph:"e.g. the first thing we actually do is strip away everything that's not essential — most people come in with too many priorities, and we spend the first session getting honest about what actually matters"},
+      {label:"The shift most people experience is ___",hint:"Not the final outcome — the mindset or approach that changes during the process.",key:"v5p2",ph:"e.g. the shift most people experience is going from feeling stuck because they don't know enough to realizing they already know what to do — they just needed someone to help them see it clearly"},
+      {label:"By the end, most people find ___",hint:"The transformation — what's genuinely different on the other side?",key:"v5p3",ph:"e.g. by the end, most people find they have more momentum in four weeks than they had in the previous year — not because I gave them something new, but because we cleared away what was in the way"}
     ],
-    compile:v=>`When someone comes to me they're usually dealing with ${v.v5p0||'___'}. The first thing we do is ${v.v5p1||'___'}. By the end they typically ${v.v5p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Identity Call-to-Arms)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'I want to walk you through what it actually looks like to work with me. Not the sales version — what really happens.'},
+      {label:'WHO WE SERVE (Polarization)',      desc:'Who you work with — being clear about who this is for and who it\'s not.',
+                                  text:`When someone comes to me, they are usually dealing with ${v.v5p0||'___'}.`},
+      {label:'THE BUSINESS VALUES (Shared Values)',       desc:'The first step — what actually happens when you start working together.',
+                                  text:`The first thing we actually do together is ${v.v5p1||'___'}.`},
+      {label:'THE TRANSFORMATION (Shared Values)',    desc:'The shift most people experience — the internal and external change that happens through the work.',
+                                  text:`The shift most people experience is ${v.v5p2||'___'}.`},
+      {label:'THE INDUSTRY MISSION (Ethical Bridge)',desc:'The outcome — what most people find on the other side of the work.',
+                                  text:`By the end, most people find ${v.v5p3||'___'}.`},
+      {label:'OPEN LOOP',         desc:'Ends with tension that pulls them toward the next video — gives them a reason to stay.',
+                                  text:'Last video is coming. I am going to close this honestly — and leave one door open. If any of this has resonated, you will not want to miss it.'}
+    ],
+    compile:v=>`When someone comes to me, they're usually dealing with ${v.v5p0||'___'}. The first thing we actually do together is ${v.v5p1||'___'}. The shift most people experience is ${v.v5p2||'___'}. By the end, most people find ${v.v5p3||'___'}.`
   },
   {
-    title:"What I Learned + What's Next",
-    note:"Reflect on the challenge and offer a soft, honest invitation to the right person. This isn't a pitch — it's an open door.",
+    title:"What's Next",
+    note:"Seven videos. That's a full story — your origin, your beliefs, your process, your character. Close the arc honestly and leave one open door for the right person.",
     prompts:[
-      {label:"I started this challenge wanting to prove ___",hint:"What was your original intention?",key:"v6p0",ph:"e.g. that you don't need a production team to build a real audience"},
-      {label:"What I actually discovered was ___",hint:"What surprised you? What shifted?",key:"v6p1",ph:"e.g. that showing up imperfectly is more effective than waiting to be polished"},
-      {label:"If you're a [your audience] dealing with [their problem], here's my invitation ___",hint:"Your softest CTA — not a pitch, just an open door for the right person.",key:"v6p2",ph:"e.g. if you're a coach who's been hiding, DM me the word START and let's talk"}
+      {label:"I started this challenge wanting to prove ___",hint:"What was your original intention? What were you out to show — yourself or your audience?",key:"v6p0",ph:"e.g. I started this challenge wanting to prove that you don't need a massive following or a polished brand to have a real conversation with the right people"},
+      {label:"What I actually discovered was ___",hint:"The honest finding. What surprised you, shifted, or became real during this process?",key:"v6p1",ph:"e.g. what I actually discovered was that the most engaged response I got came from the video I almost didn't post because I thought it was too honest"},
+      {label:"The thing that surprised me most was ___",hint:"Something you didn't expect — about your audience, yourself, or the process.",key:"v6p2",ph:"e.g. the thing that surprised me most was how much clarity I got about my own work just from the act of trying to explain it simply every day"},
+      {label:"If you're a [your audience] and [situation], here's my honest invitation: ___",hint:"Your open door. Not a hard sell — a real, specific invitation for exactly the right person.",key:"v6p3",ph:"e.g. if you're a service provider who's been showing up inconsistently because you're not sure what to say, I'd love to help you fix that. DM me the word STORY and let's talk."}
     ],
-    compile:v=>`I started this challenge wanting to prove ${v.v6p0||'___'}. What I actually discovered was ${v.v6p1||'___'}. ${v.v6p2||'___'}.`
+    layerMap:v=>[
+      {label:'HOOK (Full Circle Loop)',              desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                  text:'Seven videos. Done. And I want to tell you honestly — this is not the ending I expected.'},
+      {label:'THE BUSINESS SHIFT (New Normal Declaration)',    desc:'The honest before/after — what you set out to prove and what you actually discovered.',
+                                  text:`I started this challenge wanting to prove ${v.v6p0||'___'}. What I actually discovered was ${v.v6p1||'___'}.`},
+      {label:'THE FINAL PROOF (Authority Affirmation)',     desc:'The unexpected finding — the thing that surprised you most and validates the whole journey.',
+                                  text:`The thing that surprised me most was ${v.v6p2||'___'}.`},
+      {label:'THE PARTNERSHIP INVITATION (Unfolding Horizon)',desc:'Your open door — the honest, specific invitation for the right person.',
+                                  text:`${v.v6p3||'___'}.`}
+    ],
+    compile:v=>`I started this challenge wanting to prove ${v.v6p0||'___'}. What I actually discovered was ${v.v6p1||'___'}. The thing that surprised me most was ${v.v6p2||'___'}. ${v.v6p3||'___'}.`
   }
 ];
 
@@ -1460,6 +2128,8 @@ function startVideos() {
   currentVideoIndex = 0;
   buildVideoDots('video-dots');
   buildVideoDots('script-dots');
+  buildVideoDots('cl-dots');
+  buildVideoDots('vi-dots');
   renderVideoPrompts(0);
   showScreen('screen-7');
   // sync currentIndex to screen-7 position
@@ -1472,18 +2142,43 @@ function buildVideoDots(containerId) {
   wrap.innerHTML = '';
   for (let i = 0; i < 7; i++) {
     const d = document.createElement('div');
-    d.className = 'vdot' + (i === 0 ? ' active' : '');
+    const st = state.videoStatus[i];
+    if (st === 'filmed') {
+      d.className = 'vdot filmed';
+      d.textContent = '✓';
+    } else if (st === 'skipped') {
+      d.className = 'vdot skipped';
+      d.textContent = '✕';
+    } else {
+      d.className = 'vdot' + (i === 0 ? ' active' : '');
+    }
     d.id = containerId + '-dot-' + i;
     wrap.appendChild(d);
   }
 }
 
 function updateDots(idx) {
-  ['video-dots','script-dots'].forEach(cid => {
+  ['video-dots','script-dots','cl-dots','vi-dots'].forEach(cid => {
     for (let i = 0; i < 7; i++) {
       const d = document.getElementById(cid + '-dot-' + i);
       if (!d) continue;
-      d.className = 'vdot' + (i < idx ? ' done' : i === idx ? ' active' : '');
+      const st = state.videoStatus[i];
+      if (st === 'filmed') {
+        d.className = 'vdot filmed';
+        d.textContent = '✓';
+      } else if (st === 'skipped') {
+        d.className = 'vdot skipped';
+        d.textContent = '✕';
+      } else if (i < idx) {
+        d.className = 'vdot done';
+        d.textContent = '';
+      } else if (i === idx) {
+        d.className = 'vdot active';
+        d.textContent = '';
+      } else {
+        d.className = 'vdot';
+        d.textContent = '';
+      }
     }
   });
   document.getElementById('video-eyebrow').textContent = `Video ${idx+1} of 7 — Journal Prompts`;
@@ -1494,6 +2189,7 @@ function updateDots(idx) {
 function renderVideoPrompts(idx) {
   currentVideoIndex = idx;
   updateDots(idx);
+  renderVideoTracker('prompts');
   const videos = getVideos();
   const v = videos[idx];
   const container = document.getElementById('video-journal-content');
@@ -1513,7 +2209,46 @@ function _buildPromptsContent(container, v, idx) {
   card.className = 'journal-card';
 
   let promptsHTML = '';
-  if (v.prebuilt) {
+  if (v.beats) {
+    // V1 — show editable prompts pre-filled from MVO answers
+    const sv = state.videos;
+    const level = state.level || 1;
+    const q2 = state.mvoQ2 || {};
+    const q3 = state.mvoQ3 || {};
+    const q4 = state.mvoQ4 || {};
+    const v0Prompts = level === 1
+      ? [
+          {key:'v0p0', label:'The struggle I\'ve been sitting with is ___',
+           hint:'From your earlier answers — adjust this to sound exactly like you.',
+           def: q2.before_full || ''},
+          {key:'v0p1', label:'What finally made today the day was ___',
+           hint:'Edit this to match how you\'d actually say it.',
+           def: q3.catalyst_full || ''},
+          {key:'v0p2', label:'I\'m making these videos for ___',
+           hint:'Who are you here for? Describe them in your own words.',
+           def: q4.village_full || ''}
+        ]
+      : [
+          {key:'v0p0', label:'The people I\'m here for are ___',
+           hint:'From your earlier answers — adjust to sound exactly like you.',
+           def: q2.village_full || ''},
+          {key:'v0p1', label:'The thing they\'re working through right now is ___',
+           hint:'The core challenge your audience faces — edit if needed.',
+           def: q3.before_full || ''},
+          {key:'v0p2', label:'The gap I\'ve spent time working through is ___',
+           hint:'From your earlier answers — edit if needed.',
+           def: q4.crack_full || ''}
+        ];
+    // Pre-populate from MVO defaults on first load
+    v0Prompts.forEach(p => { if (!sv[p.key] && p.def) sv[p.key] = p.def; });
+    promptsHTML = v0Prompts.map(p => `
+      <div class="input-group">
+        <label class="input-label">${p.label}</label>
+        <span class="input-hint">${p.hint}</span>
+        <textarea class="text-input" rows="2" placeholder="(pre-filled from your answers)"
+          oninput="state.videos['${p.key}']=this.value">${sv[p.key] || p.def}</textarea>
+      </div>`).join('');
+  } else if (v.prebuilt) {
     // show the pre-written script right on the prompts screen
     const prebuiltScript = v.script();
     promptsHTML = `
@@ -1560,7 +2295,7 @@ function _buildPromptsContent(container, v, idx) {
   skipGenBtn.className = 'btn-skip';
   skipGenBtn.style.cssText = 'font-size:16px;margin-top:4px;';
   skipGenBtn.textContent = idx < 6 ? 'Skip for now — next video →' : 'Skip — see my full plan →';
-  skipGenBtn.onclick = () => afterFilmed(idx);
+  skipGenBtn.onclick = () => afterFilmed(idx, 'skipped');
   btnWrap.appendChild(skipGenBtn);
 
   if (idx > 0) {
@@ -1589,13 +2324,55 @@ function _buildPromptsContent(container, v, idx) {
 }
 
 // ── PHASE B: GENERATED SCRIPT ─────────────────────────
-function showScriptView(idx) {
+const SCRIPT_LOADING_MSGS = [
+  "The best video you'll make is the honest one.",
+  "You don't need perfect. You need real.",
+  "Every creator you admire hit record before they were ready.",
+  "The script is the easy part. Pressing record is the brave part.",
+  "People follow people who show up. You're showing up.",
+  "Your voice is the thing no one else can replicate.",
+  "The right viewer has been waiting for someone exactly like you.",
+  "Done beats perfect every single time.",
+  "One video changes nothing. Seven videos changes everything.",
+  "You already know what to say. You just need to say it.",
+  "The camera doesn't see your nerves. It sees your conviction.",
+  "What you share today might be exactly what someone needs.",
+  "Clarity comes from doing, not from thinking about doing.",
+  "You're not performing. You're connecting.",
+  "The version of you that posts this is who you're becoming.",
+  "Starting is the hardest part. You already started.",
+  "Your story is already inside you. This just helps you say it out loud.",
+  "Every great series started with a single video. This is yours.",
+];
+
+function showScriptView(idx, skipLoading) {
+  if (editingFromPlan || skipLoading) {
+    _doShowScriptView(idx);
+    return;
+  }
+  const msgs = SCRIPT_LOADING_MSGS;
+  const msg = msgs[Math.floor(Math.random() * msgs.length)];
+  const msgEl = document.getElementById('script-loading-msg');
+  if (msgEl) msgEl.textContent = msg;
+  showScreen('screen-script-loading');
+  setTimeout(() => _doShowScriptView(idx), 1000);
+}
+
+function _doShowScriptView(idx) {
   const videos = getVideos();
   const v = videos[idx];
 
   // compile the script
   let compiled = '';
-  if (v.prebuilt) {
+  let beatsData = null;
+  if (v.beats) {
+    beatsData = v.beats();
+    compiled = beatsData.map(b=>b.text).join('\n\n');
+  } else if (v.layerMap) {
+    // layerMap provides structured beats; compile joins them for the clean/edit view
+    const layerBeats = v.layerMap(state.videos);
+    compiled = layerBeats.map(b=>b.text).join('\n\n');
+  } else if (v.prebuilt) {
     compiled = v.script();
   } else if (v.compile) {
     compiled = v.compile(state.videos);
@@ -1612,9 +2389,46 @@ function showScriptView(idx) {
   document.getElementById('sv-badge').textContent = 'VIDEO ' + (idx + 1);
   document.getElementById('sv-title').textContent = v.title;
 
+  // Populate beats (guided) view
+  const beatsEl = document.getElementById('sv-beats');
+  if (beatsEl) {
+    if (beatsData) {
+      beatsEl.innerHTML = beatsData.map(b =>
+        `<div class="sv-beat">` +
+        `<div class="sv-beat-label" style="display:flex;justify-content:space-between;align-items:center;">` +
+        `<span>${b.label}</span><span class="sv-regen-link">regenerate ↺</span>` +
+        `</div>` +
+        (b.desc ? `<div class="sv-beat-desc">${b.desc}</div>` : '') +
+        `<p class="sv-beat-text">${b.text}</p>` +
+        `</div>`
+      ).join('');
+    } else if (v.layerMap) {
+      // Build beats from prompts + layerMap
+      const allBeats = v.layerMap(state.videos);
+      beatsEl.innerHTML = allBeats.map(b =>
+        `<div class="sv-beat">` +
+        `<div class="sv-beat-label" style="display:flex;justify-content:space-between;align-items:center;">` +
+        `<span>${b.label}</span><span class="sv-regen-link">regenerate ↺</span>` +
+        `</div>` +
+        (b.desc ? `<div class="sv-beat-desc">${b.desc}</div>` : '') +
+        `<p class="sv-beat-text">${b.text}</p>` +
+        `</div>`
+      ).join('');
+    } else {
+      const txt = state.videos[editKey] || compiled;
+      beatsEl.innerHTML = txt.split('\n\n').map(p =>
+        `<p class="sv-beat-text" style="margin-bottom:20px;">${p}</p>`
+      ).join('');
+    }
+  }
+
+  // Populate clean (editable) view
   const editor = document.getElementById('script-editor');
   editor.value = state.videos[editKey];
   editor.oninput = () => { state.videos[editKey] = editor.value; };
+
+  // Start in guided view
+  setScriptView('guided');
 
   // wire up I Filmed It / Done Editing
   const filmedBtn = document.getElementById('btn-filmed-main');
@@ -1641,24 +2455,69 @@ function showScriptView(idx) {
     };
   } else {
     filmedBtn.textContent = idx < 6 ? '✅ I Filmed It! → Next Video' : '✅ I Filmed It! → See My Full Plan';
-    filmedBtn.onclick = () => afterFilmed(idx);
+    filmedBtn.onclick = () => afterFilmed(idx, 'filmed');
     skipBtn.textContent = idx < 6 ? 'Skip this one for now → Next Video' : 'Skip → See My Full Plan';
-    skipBtn.onclick = () => afterFilmed(idx);
+    skipBtn.onclick = () => afterFilmed(idx, 'skipped');
   }
 
-  showScreen('screen-script');
-  currentIndex = screenOrder.indexOf('screen-script');
-  updateDots(idx);
-  window.scrollTo(0, 0);
+  // Video 1 first-time reveal: show Epiphany Bridge loading animation
+  const isFirstV1 = idx === 0 && !state.videos['_v1_seen'];
+  const loadingEl = document.getElementById('v1-loading');
+  const mainContent = document.getElementById('script-main-content');
+
+  if (isFirstV1) {
+    state.videos['_v1_seen'] = true;
+    if (loadingEl) loadingEl.style.display = 'block';
+    if (mainContent) mainContent.style.display = 'none';
+
+    showScreen('screen-script');
+    currentIndex = screenOrder.indexOf('screen-script');
+    updateDots(0);
+    window.scrollTo(0, 0);
+
+    // Stagger epiphany lines
+    const ep1 = document.getElementById('ep1');
+    const ep2 = document.getElementById('ep2');
+    const ep3 = document.getElementById('ep3');
+    [ep1, ep2, ep3].forEach(e => { if (e) e.classList.remove('visible'); });
+    setTimeout(() => { if (ep1) ep1.classList.add('visible'); }, 350);
+    setTimeout(() => { if (ep2) ep2.classList.add('visible'); }, 1000);
+    setTimeout(() => { if (ep3) ep3.classList.add('visible'); }, 1700);
+
+    setTimeout(() => {
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (mainContent) mainContent.style.display = '';
+      _addV1Tracker();
+    }, 2500);
+  } else {
+    // Ensure loading is hidden and content visible for all other visits
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (mainContent) mainContent.style.display = '';
+    renderVideoTracker('script');
+    showScreen('screen-script');
+    currentIndex = screenOrder.indexOf('screen-script');
+    updateDots(idx);
+    window.scrollTo(0, 0);
+  }
 }
 
-function afterFilmed(idx) {
+function afterFilmed(idx, status) {
+  // Record status ('filmed' or 'skipped')
+  if (status) {
+    state.videoStatus[idx] = status;
+    updateDots(idx + 1 < 7 ? idx + 1 : idx);
+    saveProgress(); // persist after every video completion
+  }
+
   if (idx < 6) {
-    showScreen('screen-7');
+    renderVideoIntro(idx + 2); // video numbers are 1-based, idx is 0-based; next video = idx+2
+    showScreen('screen-video-intro');
+    // screen-video-intro is used out-of-band for V2-7; park currentIndex at screen-7
     currentIndex = screenOrder.indexOf('screen-7');
-    renderVideoPrompts(idx + 1);
     window.scrollTo(0, 0);
   } else {
+    // Last video done — trigger level complete
+    triggerLevelComplete();
     buildPlan();
     showScreen('plan-screen');
     currentIndex = screenOrder.indexOf('plan-screen');
@@ -1666,10 +2525,116 @@ function afterFilmed(idx) {
   }
 }
 
+function backFromVideoIntro() {
+  if (currentPreviewVideoNum <= 1) {
+    // Go back to screen-comm-layers (V1 preface)
+    renderPrefaceV1();
+    showScreen('screen-comm-layers');
+    currentIndex = screenOrder.indexOf('screen-comm-layers');
+  } else {
+    // Go back to the script screen for the previous video
+    const prevIdx = currentPreviewVideoNum - 2;
+    currentVideoIndex = prevIdx;
+    showScriptView(prevIdx, true); // skip loading on back-navigation
+  }
+  window.scrollTo(0, 0);
+}
+
+// Skip a video directly from its preface screen
+function skipFromPreface(idx) {
+  afterFilmed(idx, 'skipped');
+}
+
+// ── VIDEO TRACKER ──────────────────────────────────────
+function renderVideoTracker(context) {
+  context = context || 'prompts';
+  const videos = getVideos();
+  const slots = ['tracker-slot-cl','tracker-slot-vi','tracker-slot-journal','tracker-slot-script'];
+  const html = _buildTrackerHTML(videos, context);
+  slots.forEach(sid => {
+    const el = document.getElementById(sid);
+    if (el) el.innerHTML = html;
+  });
+}
+
+function _buildTrackerHTML(videos, context) {
+  context = context || 'prompts';
+  const labels = videos ? videos.map((v,i) => 'V'+(i+1)) : ['V1','V2','V3','V4','V5','V6','V7'];
+  return labels.map((label, i) => {
+    const st = state.videoStatus[i];
+    let cls, status;
+    if (st === 'filmed') {
+      cls = 'vt-done'; status = '✓';
+    } else if (st === 'skipped') {
+      cls = 'vt-skipped'; status = '✕';
+    } else if (i === currentVideoIndex) {
+      cls = 'vt-next';
+      status = (context === 'preface') ? '→' : '↑';
+    } else if (context === 'script' && i === currentVideoIndex + 1) {
+      // On script screen, hint the next video but keep it gray (not yet active)
+      cls = 'vt-locked'; status = '→';
+    } else if (i < currentVideoIndex) {
+      cls = 'vt-done'; status = '✓';
+    } else {
+      cls = 'vt-locked'; status = '🔒';
+    }
+    return `<div class="vt-item ${cls}"><div class="vt-label">${label}</div><div class="vt-status">${status}</div></div>`;
+  }).join('');
+}
+
+function triggerLevelComplete() {
+  const wrap   = document.getElementById('progress-bar-wrap');
+  const fill   = document.getElementById('progress-fill');
+  const fillL2 = document.getElementById('progress-fill-l2');
+  if (state.level === 2) {
+    fill.style.width   = '100%';
+    fillL2.style.width = '100%';
+    fillL2.style.opacity = '1';
+    maxProgressL2Pct = 100;
+    wrap.classList.add('progress-l2-complete');
+    wrap.classList.remove('progress-l1-complete');
+    document.getElementById('progress-label').innerHTML =
+      '<span class="progress-level-label l2">LEVEL 2 COMPLETE 🎉</span>';
+    launchConfetti();
+  } else {
+    fill.style.width = '100%';
+    maxProgressPct = 100;
+    wrap.classList.add('progress-l1-complete');
+    document.getElementById('progress-label').innerHTML =
+      '<span class="progress-level-label l1">LEVEL 1 COMPLETE ✓</span>';
+  }
+}
+
 function skipToEnd() {
   buildPlan();
   showScreen('plan-screen');
   currentIndex = screenOrder.indexOf('plan-screen');
+  window.scrollTo(0, 0);
+}
+
+function redoScript() {
+  const idx = currentVideoIndex;
+  const videos = getVideos();
+  const v = videos[idx];
+  delete state.videos['script_v' + idx];
+  if (v.beats) {
+    // V1: clear MVO answers and journal-prompt edits, go back to V1 preface
+    state.mvoQ2 = null; state.mvoQ3 = null; state.mvoQ4 = null;
+    mvoQ2Skipped = false;
+    delete state.videos['_v1_seen'];
+    delete state.videos['v0p0'];
+    delete state.videos['v0p1'];
+    delete state.videos['v0p2'];
+    renderPrefaceV1();
+    showScreen('screen-comm-layers');
+    currentIndex = screenOrder.indexOf('screen-comm-layers');
+  } else {
+    // V2-7: clear prompts answers, go back to prompts screen
+    if (v.prompts) { v.prompts.forEach(p => { delete state.videos[p.key]; }); }
+    renderVideoPrompts(idx);
+    showScreen('screen-7');
+    currentIndex = screenOrder.indexOf('screen-7');
+  }
   window.scrollTo(0, 0);
 }
 
@@ -1690,13 +2655,33 @@ function runItAgain() {
   }
   // Wipe only video answers, keep name/goal/minigoal
   state.videos = {};
+  state.videoStatus = {};
   currentVideoIndex = 0;
+  currentPreviewVideoNum = 1;
+  // Reset progress bar for L2 run
+  maxProgressL2Pct = 0;
+  maxProgressPct = 100; // L1 was 100% done
+  const pbWrap2 = document.getElementById('progress-bar-wrap');
+  if (pbWrap2) {
+    pbWrap2.classList.remove('progress-l1-complete','progress-l2-complete');
+  }
+  const pfill2  = document.getElementById('progress-fill');
+  const pfillL2b = document.getElementById('progress-fill-l2');
+  if (pfill2)   pfill2.style.width   = '100%'; // L1 stays complete
+  if (pfillL2b) { pfillL2b.style.width = '0%'; pfillL2b.style.opacity = '0'; }
+  document.getElementById('progress-label').textContent = 'PROGRESS';
   buildVideoDots('video-dots');
   buildVideoDots('script-dots');
+  buildVideoDots('cl-dots');
+  buildVideoDots('vi-dots');
   renderVideoPrompts(0);
   showScreen('screen-7');
   currentIndex = screenOrder.indexOf('screen-7');
   window.scrollTo(0, 0);
+}
+
+function _addV1Tracker() {
+  renderVideoTracker('script');
 }
 
 function goBackToPrompts() {
@@ -1746,10 +2731,14 @@ function buildPlan(){
     // prefer the user's edited version, fall back to compile
     let script = state.videos['script_v'+i] || '';
     if (!script) {
-      if(v.prebuilt){ script = v.script(); }
+      if(v.beats){ script = v.beats().map(b=>b.text).join('\n\n'); }
+      else if(v.layerMap){ script = v.layerMap(state.videos).map(b=>b.text).join('\n\n'); }
+      else if(v.prebuilt){ script = v.script(); }
       else if(v.compile){ script = v.compile(state.videos); }
     }
+    const pageBreak = i > 0 ? '<div class="pvrow-page-break"></div>' : '';
     html+=`
+      ${pageBreak}
       <div class="plan-video-row" id="pvrow-${i}">
         <div class="plan-row-header">
           <div class="plan-vnum">0${i+1}</div>
@@ -1804,20 +2793,756 @@ function togglePlanRow(i){
 
 // ── RESTART ───────────────────────────────────────────
 function restartWizard(){
-  Object.keys(state).forEach(k=>state[k]=k==='videos'?{}:null);
-  state.name='';state.minigoalText='';
+  if (!confirm('This will erase all your progress and start over. Are you sure?')) return;
+  localStorage.removeItem(SAVE_KEY);
+  Object.keys(state).forEach(k=>state[k]=k==='videos'||k==='videoStatus'?{}:null);
+  state.name='';state.minigoalText='';state.videoStatus={};
+  state.mvoQ2=null;state.mvoQ3=null;state.mvoQ4=null;
+  mvoQ2Skipped=false;
+  currentPreviewVideoNum=1;
   screenOrder=['screen-0','screen-1'];
   currentIndex=0;currentVideoIndex=0;transitioning=false;
+  // Reset progress bar classes
+  const pbWrap = document.getElementById('progress-bar-wrap');
+  if (pbWrap) {
+    pbWrap.classList.remove('progress-l1-complete','progress-l2-complete');
+  }
+  document.getElementById('progress-label').textContent = 'PROGRESS';
   document.getElementById('commitment-fill').textContent='—';
   document.getElementById('user-name').value='';
   document.getElementById('script-editor').value='';
+  // Reset V1 loading + tracker state
+  const v1Loading = document.getElementById('v1-loading');
+  const scriptMain = document.getElementById('script-main-content');
+  if (v1Loading) v1Loading.style.display = 'none';
+  if (scriptMain) scriptMain.style.display = '';
+  // Reset epiphany line visibility
+  ['ep1','ep2','ep3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible');
+  });
+  // Reset progress bars
+  maxProgressPct = 0;
+  maxProgressL2Pct = 0;
+  const pfill = document.getElementById('progress-fill');
+  const pfillL2 = document.getElementById('progress-fill-l2');
+  if (pfill) pfill.style.width = '0%';
+  if (pfillL2) { pfillL2.style.width = '0%'; pfillL2.style.opacity = '0'; }
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active','anim-in','anim-out'));
   document.getElementById('screen-0').classList.add('active');
   updateProgress('screen-0');
   window.scrollTo(0,0);
 }
 
+// ── MVO MINI-WIZARD ───────────────────────────────────
+const MVO_TOPIC_CARDS = [
+  {icon:'🌿',text:'Health, wellness, and feeling your best',
+   village_full:'people on a wellness journey who want to feel better in their body, their energy, and their everyday life',
+   village_hook:'If you are someone working on your health and how you feel in your own skin'},
+  {icon:'💫',text:'Wealth, abundance, and building what is truly yours',
+   village_full:'people building their finances or their business who want something real and grounded, not hype',
+   village_hook:'If you are building wealth or a business and want someone who speaks plainly about what actually works'},
+  {icon:'🌸',text:'Love, relationships, and the connections that matter',
+   village_full:'people working on their relationships and the way they show up for the people they love and for themselves',
+   village_hook:'If you are someone who wants to feel more connected and more at peace in your relationships'},
+  {icon:'✨',text:'Good vibes, stories, and things that light you up',
+   village_full:'people who want more joy, laughter, and lightness in their everyday life',
+   village_hook:'If you just want more good things in your feed and something genuinely worth stopping to watch'}
+];
+
+const MVO_DATA = {
+  q2:{
+    1:{question:"What's been holding you back from posting?",
+       placeholder:"Describe what's actually been in your way...",
+       cards:[
+         {icon:'😬',text:'Getting on camera feels terrifying',
+          before_short:'the camera thing',
+          before_full:'I have wanted to do this, but every time I think about filming, something shuts it down. The camera feels like a judgment I am not ready to face.'},
+         {icon:'📋',text:'I never know what to say',
+          before_short:'not knowing what to say',
+          before_full:'I sit down to plan a video and my mind goes completely blank. I know I have something worth sharing. I just cannot seem to get it out.'},
+         {icon:'⏳',text:'I do not feel ready yet',
+          before_short:'waiting to feel ready',
+          before_full:'There is always something that feels like it needs to happen first. More confidence, a better setup, a clearer plan. The readiness never quite arrives.'},
+         {icon:'🔄',text:'I keep putting it off',
+          before_short:'the endless delay',
+          before_full:'I have been meaning to start for longer than I want to admit. Life gets in the way, or I get in the way. It just keeps not happening.'}
+       ]},
+    2:{question:"What does your audience come to you for?",
+       placeholder:"What topic or niche does your content focus on?",
+       cards:MVO_TOPIC_CARDS}
+  },
+  q3:{
+    1:{question:"What made you decide today is the day?",
+       placeholder:"What actually pushed you to start today?",
+       cards:[
+         {icon:'👀',text:'I saw someone just like me doing it',
+          catalyst_full:'Something shifted when I watched someone who looked just like me, no big following, no fancy setup, just showing up, and it was actually working. If they could do it, the reason I could not was only me.'},
+         {icon:'🔥',text:'I got tired of waiting to feel ready',
+          catalyst_full:'I realized the feeling of ready is not coming. No amount of planning or consuming more content is going to get me there. The only way forward is to start, and the only day I can start is today.'},
+         {icon:'💬',text:'Someone told me I needed to start',
+          catalyst_full:'Someone I trust looked at me and said it was time. And somewhere under all my reasons for waiting, I knew they were right. So here I am.'},
+         {icon:'⚡',text:'I just decided. No more waiting.',
+          catalyst_full:'There was no big moment. I just decided. I looked at where I was heading if I kept waiting and decided that was not the version of this story I wanted to tell.'}
+       ]},
+    2:{question:"What's the biggest challenge your audience is dealing with?",
+       placeholder:"Describe the main challenge your audience faces...",
+       cards:[
+         {icon:'👤',text:'They feel invisible in their niche',
+          before_full:'The people I work with are genuinely good at what they do, but nobody knows they exist. They watch others with less skill get the attention, the clients, the opportunities, and they cannot figure out how to change that.'},
+         {icon:'🌊',text:'They feel overwhelmed and stuck',
+          before_full:'The people I work with know what they want, but the path there feels impossibly complicated. They are doing everything, nothing is clicking, and the gap between where they are and where they want to be keeps growing.'},
+         {icon:'🧱',text:'They know what they want but cannot get there',
+          before_full:'The people I work with can see exactly where they want to be. The problem is every time they get close, something blocks them, or they second-guess themselves back to square one.'},
+         {icon:'📉',text:'They are undercharging or undervalued',
+          before_full:'The people I work with are delivering real results but not getting paid what that is worth. They have to prove themselves over and over to clients who do not see the value they actually provide.'}
+       ]}
+  },
+  q4:{
+    1:{question:"What do you want to make videos about?",
+       placeholder:"What topic or niche do you want to focus on?",
+       cards:MVO_TOPIC_CARDS},
+    2:{question:"What makes you the right person to help them?",
+       placeholder:"What have you done, built, or lived through that gives you real insight here?",
+       cards:[
+         {icon:'🗺️',text:'I have been exactly where they are',
+          crack_full:'I know this because I have been exactly where they are. I lived through the thing they are dealing with and found a way through it. That is not a pitch. That is why this work matters to me.'},
+         {icon:'🔨',text:'I built something that actually works',
+          crack_full:'I know this because I built a system that solved it. Not a theory borrowed from someone else, something I put together through years of actual work that produces real results.'},
+         {icon:'🤝',text:'I have helped dozens of people through this',
+          crack_full:'I know this because I have watched dozens of people work through this problem. I have seen every version of what keeps people stuck and I know what actually moves things forward.'},
+         {icon:'🔍',text:'I see the patterns they cannot see',
+          crack_full:'I know this because I can see what they cannot see from inside it. When you are stuck in a problem, it looks like a wall. From where I stand, I can see the door. That is what I bring.'}
+       ]}
+  }
+};
+
+// ── AUTO-POPULATE MVO Q2 FROM ONBOARDING DATA ────────
+function autoPopulateMvoQ2FromOnboarding() {
+  const blockerMap = {
+    camera: {
+      before_short: 'the camera thing',
+      before_full: 'I have wanted to do this, but every time I think about filming, something shuts it down. The camera feels like a judgment I am not ready to face.'
+    },
+    ideas: {
+      before_short: 'not knowing what to say',
+      before_full: 'I sit down to plan a video and my mind goes completely blank. I know I have something worth sharing. I just cannot seem to get it out.'
+    },
+    procrastinating: {
+      before_short: 'the endless delay',
+      before_full: 'I have been meaning to start for longer than I want to admit. Life gets in the way, or I get in the way. It just keeps not happening.'
+    },
+    nothing: {
+      before_short: 'not being sure what my thing is',
+      before_full: 'I have been holding off because I was not sure I had anything worth saying yet. What to talk about, who would care, whether I was the right person to even do this.'
+    }
+  };
+  const historyMap = {
+    few: {
+      before_short: 'never finding consistency',
+      before_full: 'I have posted before, but it never stuck. A video or two, feel weird about it, quietly stop. The pattern kept repeating and nothing ever changed.'
+    },
+    stops: {
+      before_short: 'always falling off',
+      before_full: 'I know the pattern well. Start strong, something happens, disappear for months. I have done it enough times that starting again feels like setting myself up to fail again.'
+    },
+    was: {
+      before_short: 'losing the rhythm I had',
+      before_full: 'I used to have a rhythm. Something broke it and I just never came back. It has been sitting in the back of my mind ever since — this thing I know I let slip away.'
+    }
+  };
+  if (state.blocker && blockerMap[state.blocker]) {
+    state.mvoQ2 = blockerMap[state.blocker];
+    mvoQ2Skipped = true;
+  } else if (state.history && historyMap[state.history]) {
+    state.mvoQ2 = historyMap[state.history];
+    mvoQ2Skipped = true;
+  }
+}
+
+function renderMvoScreen(qNum) {
+  const level = state.level || 1;
+  const data = MVO_DATA['q'+qNum][level];
+  // When Q2 was auto-populated from onboarding, the 3-question sequence becomes 2
+  const qTotal = mvoQ2Skipped ? 2 : 3;
+  const qLabel = mvoQ2Skipped ? qNum - 2 : qNum - 1; // Q3→1, Q4→2 when skipped
+  document.getElementById('mvo'+qNum+'-label').textContent = 'Getting Your Script Ready — Question '+qLabel+' of '+qTotal;
+  document.getElementById('mvo'+qNum+'-question').textContent = data.question;
+  document.getElementById('mvo'+qNum+'-textarea').placeholder = data.placeholder;
+  // Reset own-way
+  document.getElementById('mvo'+qNum+'-own-field').style.display = 'none';
+  const grid = document.getElementById('mvo'+qNum+'-cards');
+  grid.innerHTML = '';
+  data.cards.forEach(card => {
+    const el = document.createElement('div');
+    el.className = 'choice-card';
+    el.innerHTML = `<span class="card-emoji">${card.icon}</span><div class="card-title">${card.text}</div>`;
+    el.onclick = () => selectMvoCard(qNum, card, el);
+    grid.appendChild(el);
+  });
+}
+
+function selectMvoCard(qNum, cardData, el) {
+  el.classList.add('selecting');
+  state['mvoQ'+qNum] = cardData;
+  setTimeout(() => goNext(), 300);
+}
+
+function toggleMvoOwn(e, fieldId) {
+  e.preventDefault();
+  const el = document.getElementById(fieldId);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function confirmMvoOwn(qNum) {
+  const text = document.getElementById('mvo'+qNum+'-textarea').value.trim();
+  if (!text) return;
+  const level = state.level || 1;
+  const custom = {};
+  if      (qNum===2 && level===1) { custom.before_short = text.split(' ').slice(0,5).join(' '); custom.before_full = text; }
+  else if (qNum===2 && level===2) { custom.village_full = text; custom.village_hook = 'If you are someone who values '+text; }
+  else if (qNum===3 && level===1) { custom.catalyst_full = text; }
+  else if (qNum===3 && level===2) { custom.before_full = text; }
+  else if (qNum===4 && level===1) { custom.village_full = text; custom.village_hook = 'If you are someone looking for '+text; }
+  else if (qNum===4 && level===2) { custom.crack_full = text; }
+  state['mvoQ'+qNum] = custom;
+  goNext();
+}
+
+// ── VIDEO INTRO COPY ─────────────────────────────────
+const INTRO_COPY = {
+  1: {
+    L1: {
+      label: 'Video 1 of 7 — The Origin Signal',
+      title: "Let's Start With Why You're Here",
+      body: "You're about to build your first script. This is Video 1 of 7 — and it's the one that opens the door. We're going to ask you three quick questions, then generate your script from your answers. After this, you get six more. Each one tells a different story: your turning point, your first big realization, how you think differently, where you are now, the thing most people get wrong, and the moment you decided to own your space. Seven videos. A real arc. Proof that you show up. This is where it starts.",
+      result: 'Recognition',
+      framework: [
+        {name:'Hook',                   trigger:'Audience Signal'},
+        {name:'Identity',               trigger:'Trust Layer'},
+        {name:'The Waiting Struggle',   trigger:'Empathy Lock / Mirror Moment'},
+        {name:'The Start Declaration',  trigger:'Open Loop'}
+      ],
+      triggers: ['Audience Signal','Empathy Lock','Mirror Moment','Contrast Shift','Trust Layer','Open Loop','Relationship Primer']
+    },
+    L2: {
+      label: 'Video 1 of 7 — The Origin Signal',
+      title: "Let's Start With Why You're Here",
+      body: "You're about to build your first expert script. This is Video 1 of 7 — the one that signals you're here and you know your space. We'll ask you three questions, then build your script from your answers. What comes next is a full arc: your origin story, your first industry reframe, how you think about the work, what others get wrong, and why your audience should keep coming back. Seven videos. Real authority. A content body that actually does something for your business. Three questions. Let's go.",
+      result: 'Recognition',
+      framework: [
+        {name:'Hook',                     trigger:'Audience Signal'},
+        {name:'Expertise',                trigger:'Trust Layer'},
+        {name:'The Market Gap',           trigger:'Empathy Lock / Mirror Moment'},
+        {name:'The Solution Declaration', trigger:'Open Loop'}
+      ],
+      triggers: ['Audience Signal','Empathy Lock','Mirror Moment','Contrast Shift','Trust Layer','Open Loop','Relationship Primer']
+    }
+  },
+  2: {
+    L1: {
+      label: 'Video 2 of 7 — The Turning Point',
+      title: 'Tell Them What Finally Moved You',
+      body: "People don't follow creators because of what they do — they follow them because of why they started. This video gives your audience a reason to root for you. You're not being dramatic. You're being honest about the moment everything shifted. That honesty is what turns a viewer into a follower.",
+      result: 'Inspiration',
+      framework: [
+        {name:'Hook',                        trigger:'Catalyst Moment'},
+        {name:'The Internal Conflict',       trigger:'Vulnerability Entry'},
+        {name:'The False Solution',          trigger:'Enemy Identification'},
+        {name:'The Decision to Show Up',     trigger:'Agency Reclaim / Path Clarity'}
+      ],
+      triggers: ['Vulnerability Entry','Catalyst Moment','Enemy Identification','Agency Reclaim','Relatable Stakes','Path Clarity','Shared Mission']
+    },
+    L2: {
+      label: 'Video 2 of 7 — The Origin Story',
+      title: 'Show Them Why You Built This',
+      body: "Your audience doesn't just want to buy from you — they want to understand you. This video answers the question they're already asking: why did you build this, and why should I trust you? You're not pitching anything. You're showing them the moment you decided this work mattered.",
+      result: 'Inspiration',
+      framework: [
+        {name:'Hook',                        trigger:'Catalyst Moment'},
+        {name:'The Industry Frustration',    trigger:'Vulnerability Entry'},
+        {name:'The Broken Method',           trigger:'Enemy Identification'},
+        {name:'The Decision to Innovate',    trigger:'Agency Reclaim / Path Clarity'}
+      ],
+      triggers: ['Vulnerability Entry','Catalyst Moment','Enemy Identification','Agency Reclaim','Relatable Stakes','Path Clarity','Shared Mission']
+    }
+  },
+  3: {
+    L1: {
+      label: 'Video 3 of 7 — The First Epiphany',
+      title: "Say The Thing Most People Won't",
+      body: "Every person watching you held some version of the belief you're about to challenge. This video isn't about being controversial — it's about being the person who finally said the thing they'd been thinking but never heard out loud. One honest reframe, told through your real experience, is what builds intellectual trust.",
+      result: 'Insight',
+      framework: [
+        {name:'Hook',                             trigger:'Pattern Break'},
+        {name:'The Struggle Story',               trigger:'Discovery Arc'},
+        {name:'The "Aha" Moment',                 trigger:'Cognitive Reframe'},
+        {name:'The Cost of Staying Invisible',    trigger:'Cost Revelation / Simplicity Signal'}
+      ],
+      triggers: ['Pattern Break','Discovery Arc','Cognitive Reframe','The "Aha" Transfer','Cost Revelation','Simplicity Signal','Authority Anchor']
+    },
+    L2: {
+      label: 'Video 3 of 7 — The First Epiphany',
+      title: 'Challenge What Your Industry Gets Wrong',
+      body: "Your audience has been told things that aren't working for them. This video positions you as someone who sees what others miss. You're not tearing down your industry — you're offering a better lens. One clear reframe, backed by what you've actually seen, is what makes people think: this person gets it.",
+      result: 'Insight',
+      framework: [
+        {name:'Hook',                             trigger:'Pattern Break'},
+        {name:'The Research/Work Story',          trigger:'Discovery Arc'},
+        {name:'The New Insight',                  trigger:'Cognitive Reframe'},
+        {name:'The Cost of the Wrong Method',     trigger:'Cost Revelation / Simplicity Signal'}
+      ],
+      triggers: ['Pattern Break','Discovery Arc','Cognitive Reframe','The "Aha" Transfer','Cost Revelation','Simplicity Signal','Authority Anchor']
+    }
+  },
+  4: {
+    L1: {
+      label: 'Video 4 of 7 — The Progress Signal',
+      title: "Show Them You're Still Doing This",
+      body: "Most people disappear after their first few videos. You're still here — and that matters more than you think. This video is proof that you're the kind of person who follows through. You don't have to have everything figured out. You just have to be honest about where you are and why you're still going.",
+      result: 'Credibility',
+      framework: [
+        {name:'Hook',                    trigger:'Momentum Validation'},
+        {name:'The Experience So Far',   trigger:'Small Win Proof'},
+        {name:'The Reality of the Work', trigger:'Real-Time Transparency'},
+        {name:'The Forward Shift',       trigger:'Social Evidence'}
+      ],
+      triggers: ['Behind-the-Curtain Access','Momentum Validation','Small Win Proof','Expert Ease','Objection Pre-emption','Real-Time Transparency','Social Evidence']
+    },
+    L2: {
+      label: 'Video 4 of 7 — The Teaching Moment',
+      title: 'Give Them Something They Can Use Right Now',
+      body: "This is where you demonstrate real value — not by talking about what you offer, but by actually giving something useful. One insight, explained simply, proves your expertise better than any testimonial. The person watching is already asking: can this person actually help me? Answer it by teaching.",
+      result: 'Credibility',
+      framework: [
+        {name:'Hook',                   trigger:'Momentum Validation'},
+        {name:'The Live Demonstration', trigger:'Method / Expert Ease'},
+        {name:'The Specific Result',    trigger:'Small Win Proof'},
+        {name:'The Client Evidence',    trigger:'Social Evidence'}
+      ],
+      triggers: ['Behind-the-Curtain Access','Momentum Validation','Small Win Proof','Expert Ease','Objection Pre-emption','Real-Time Transparency','Social Evidence']
+    }
+  },
+  5: {
+    L1: {
+      label: 'Video 5 of 7 — The Second Epiphany',
+      title: 'Plant Your Flag',
+      body: "You've shown up, shared your story, and kept going. Now it's time to state what you actually believe. This video is about the conviction you hold that most people in your world have backwards. You're not here to convince anyone. You're here to resonate with the people who already feel it too.",
+      result: 'Authority',
+      framework: [
+        {name:'Hook',               trigger:'Sacred Cow Slaughter'},
+        {name:'The False Belief',   trigger:'Logic Re-stack'},
+        {name:'The New Realization',trigger:'Paradigm Break'},
+        {name:'The Future Self',    trigger:'Status Shift / Natural Invitation'}
+      ],
+      triggers: ['Sacred Cow Slaughter','Logic Re-stack','Emotional Safety','Paradigm Break','Future Pacing','Status Shift','Natural Invitation']
+    },
+    L2: {
+      label: 'Video 5 of 7 — The Second Epiphany',
+      title: 'Let Them See Your Character',
+      body: "By now, your audience has seen you show up, teach, and share your origin. This video is where they get to see your judgment. A mistake you made, the lesson it cost you, and how it changed how you work — that combination creates something testimonials can't: genuine trust in who you are.",
+      result: 'Authority',
+      framework: [
+        {name:'Hook',                    trigger:'Sacred Cow Slaughter'},
+        {name:'The Industry Myth',       trigger:'Logic Re-stack'},
+        {name:'The Better Way',          trigger:'Paradigm Break'},
+        {name:'The Natural Solution',    trigger:'Status Shift / Natural Invitation'}
+      ],
+      triggers: ['Sacred Cow Slaughter','Logic Re-stack','Emotional Safety','Paradigm Break','Future Pacing','Status Shift','Natural Invitation']
+    }
+  },
+  6: {
+    L1: {
+      label: 'Video 6 of 7 — The Alignment Moment',
+      title: 'Connect Your Story To Their Future',
+      body: "Your audience is starting to get you. Now they need to understand what you actually want for them. This video connects your journey to their possibility. It's not a pitch — it's an alignment moment. The right person is watching and asking: is this for me? This video answers yes, without pressure.",
+      result: 'Alignment',
+      framework: [
+        {name:'Hook',                  trigger:'Identity Call-to-Arms'},
+        {name:'The Internal Values',   trigger:'Shared Values'},
+        {name:'Who This Is For',       trigger:'Polarization'},
+        {name:'The Personal Mission',  trigger:'Ethical Bridge'}
+      ],
+      triggers: ['Identity Call-to-Arms','Shared Values','Transformation Story','External Validation','In-Group Belonging','Polarization','Ethical Bridge']
+    },
+    L2: {
+      label: 'Video 6 of 7 — The Alignment Moment',
+      title: "Walk Them Through What It's Like to Work With You",
+      body: "People don't buy outcomes — they buy confidence in the process that gets them there. This video walks your audience through what it actually feels like to work with you, without selling anything. You're showing them the transformation through the experience, not the promise.",
+      result: 'Alignment',
+      framework: [
+        {name:'Hook',                  trigger:'Identity Call-to-Arms'},
+        {name:'The Business Values',   trigger:'Shared Values'},
+        {name:'Who We Serve',          trigger:'Polarization'},
+        {name:'The Industry Mission',  trigger:'Ethical Bridge'}
+      ],
+      triggers: ['Identity Call-to-Arms','Shared Values','Transformation Story','External Validation','In-Group Belonging','Polarization','Ethical Bridge']
+    }
+  },
+  7: {
+    L1: {
+      label: 'Video 7 of 7 — The Resolution',
+      title: 'Close The Arc. Open The Door.',
+      body: "This is the final video — and it's the most important one for building loyalty. You started this challenge as someone deciding to show up. You're finishing it as someone who did. That arc is the story. Share what this actually did for you, what surprised you, and leave the right person an honest open door.",
+      result: 'Loyalty',
+      framework: [
+        {name:'Hook',               trigger:'Full Circle Loop'},
+        {name:'The Internal Shift', trigger:'New Normal Declaration'},
+        {name:'The Final Lesson',   trigger:'Authority Affirmation'},
+        {name:'The New Chapter',    trigger:'Unfolding Horizon'}
+      ],
+      triggers: ['Full Circle Loop','Narrative Satisfaction','New Normal Declaration','Reciprocity','Bridge to Forever','Authority Affirmation','Unfolding Horizon']
+    },
+    L2: {
+      label: 'Video 7 of 7 — The Resolution',
+      title: 'Reflect On What You Built. Invite The Right Person.',
+      body: "Seven videos. That's a full story — your origin, your beliefs, your process, your character. This final video closes the arc. You're reflecting on what you set out to do and what actually happened. And you're leaving one open door for exactly the right person. No hard sell. Just honest intention.",
+      result: 'Loyalty',
+      framework: [
+        {name:'Hook',                      trigger:'Full Circle Loop'},
+        {name:'The Business Shift',        trigger:'New Normal Declaration'},
+        {name:'The Final Proof',           trigger:'Authority Affirmation'},
+        {name:'The Partnership Invitation',trigger:'Unfolding Horizon'}
+      ],
+      triggers: ['Full Circle Loop','Narrative Satisfaction','New Normal Declaration','Reciprocity','Bridge to Forever','Authority Affirmation','Unfolding Horizon']
+    }
+  }
+};
+
+function renderFrameworkHTML(framework) {
+  if (!framework || !framework.length) return '';
+  const beats = framework.map((b, i) => {
+    const arrow = i < framework.length - 1 ? '<span class="vi-arrow">→</span>' : '';
+    return `<div class="vi-beat"><span class="vi-beat-name">${b.name}</span><span class="vi-beat-trigger">${b.trigger}</span></div>${arrow}`;
+  }).join('');
+  return `<div class="vi-framework"><div class="vi-framework-title">Script Framework</div><div class="vi-beats-row">${beats}</div></div>`;
+}
+
+function renderTriggersHTML(triggers) {
+  if (!triggers || !triggers.length) return '';
+  const tags = triggers.map(t => `<span class="vi-trigger-tag">${t}</span>`).join('');
+  return `<div class="vi-triggers-section"><div class="vi-triggers-label">Psychological Triggers Active</div><div class="vi-triggers">${tags}</div></div>`;
+}
+
+function renderResultBadgeHTML(result) {
+  if (!result) return '';
+  return `<div class="vi-result-badge"><span>Result:</span>${result}</div>`;
+}
+
+function renderPrefaceV1() {
+  const lv  = state.level || 1;
+  const key = lv === 1 ? 'L1' : 'L2';
+  const data = INTRO_COPY[1] && INTRO_COPY[1][key];
+  if (!data) return;
+  // update currentPreviewVideoNum
+  currentPreviewVideoNum = 1;
+  currentVideoIndex = 0;
+  buildVideoDots('cl-dots');  // rebuild dots fresh so updateDots has elements to update
+  updateDots(0);
+  renderVideoTracker('preface');
+  const labelEl  = document.getElementById('cl-label');
+  const titleEl  = document.getElementById('cl-title');
+  const bodyEl   = document.getElementById('cl-body');
+  const badgeEl  = document.getElementById('cl-result-badge');
+  const fwEl     = document.getElementById('cl-framework');
+  const trigEl   = document.getElementById('cl-triggers');
+  const btnEl    = document.getElementById('cl-ready-btn');
+  if (labelEl)  labelEl.textContent  = data.label;
+  if (titleEl)  titleEl.textContent  = data.title;
+  if (bodyEl)   bodyEl.textContent   = data.body;
+  if (badgeEl)  badgeEl.innerHTML    = renderResultBadgeHTML(data.result);
+  if (fwEl)     fwEl.innerHTML       = renderFrameworkHTML(data.framework);
+  if (trigEl)   trigEl.innerHTML     = renderTriggersHTML(data.triggers);
+  if (btnEl)    btnEl.onclick = () => goNext();
+}
+
+function renderVideoIntro(videoNum) {
+  const lv  = state.level || 1;
+  const key = lv === 1 ? 'L1' : 'L2';
+  const data = INTRO_COPY[videoNum] && INTRO_COPY[videoNum][key];
+  if (!data) return;
+  currentPreviewVideoNum = videoNum;
+  currentVideoIndex = videoNum - 1;
+  buildVideoDots('vi-dots');  // rebuild dots fresh so updateDots has elements to update
+  // dots: active on current video (0-based index = videoNum - 1)
+  updateDots(videoNum - 1);
+  renderVideoTracker('preface');
+  const labelEl  = document.getElementById('vi-label');
+  const titleEl  = document.getElementById('vi-title');
+  const bodyEl   = document.getElementById('vi-body');
+  const badgeEl  = document.getElementById('vi-result-badge');
+  const fwEl     = document.getElementById('vi-framework');
+  const trigEl   = document.getElementById('vi-triggers');
+  const btn      = document.getElementById('vi-ready-btn');
+  if (labelEl)  labelEl.textContent  = data.label;
+  if (titleEl)  titleEl.textContent  = data.title;
+  if (bodyEl)   bodyEl.textContent   = data.body;
+  if (badgeEl)  badgeEl.innerHTML    = renderResultBadgeHTML(data.result);
+  if (fwEl)     fwEl.innerHTML       = renderFrameworkHTML(data.framework);
+  if (trigEl)   trigEl.innerHTML     = renderTriggersHTML(data.triggers);
+  if (btn)      btn.onclick = () => readyForVideo(videoNum - 1);
+}
+
+function readyForVideo(idx) {
+  showScreen('screen-7');
+  currentIndex = screenOrder.indexOf('screen-7');
+  renderVideoPrompts(idx);
+  window.scrollTo(0, 0);
+}
+
+// ── MVO BEAT COMPILER ─────────────────────────────────
+function compileMvoBeats() {
+  const level = state.level || 1;
+  const name  = state.name || 'me';
+  let q2 = state.mvoQ2 || {};
+  let q3 = state.mvoQ3 || {};
+  let q4 = state.mvoQ4 || {};
+  // Apply any edits the user made on the V1 journal-prompts screen
+  const sv = state.videos;
+  if (level === 1) {
+    if (sv.v0p0) q2 = Object.assign({}, q2, {before_full: sv.v0p0});
+    if (sv.v0p1) q3 = Object.assign({}, q3, {catalyst_full: sv.v0p1});
+    if (sv.v0p2) q4 = Object.assign({}, q4, {village_full: sv.v0p2, village_hook: 'If you are someone looking for '+sv.v0p2});
+  } else {
+    if (sv.v0p0) q2 = Object.assign({}, q2, {village_full: sv.v0p0, village_hook: 'If you are someone who values '+sv.v0p0});
+    if (sv.v0p1) q3 = Object.assign({}, q3, {before_full: sv.v0p1});
+    if (sv.v0p2) q4 = Object.assign({}, q4, {crack_full: sv.v0p2});
+  }
+  if (level === 1) {
+    const isComeback = state.history === 'was';
+    const hookText = isComeback
+      ? 'Hey, I\'m ' + name + '. I\'m back. And I want to be honest with you about the fact that I was here before — and I stopped.'
+      : 'Hey, I\'m ' + name + '. And I\'m doing something that honestly scares me a little bit.';
+    const commitText = isComeback
+      ? 'My name is ' + name + '. I was here before and I stopped. That is the honest truth. But I am back, and this time I have seven specific videos to get through — seven commitments I am making to myself right now.'
+      : 'My name is ' + name + '. I am not promising forever. I am committing to seven videos. Seven videos to let you see who I am, what I care about, and whether anything I share is actually worth your time. That starts right now.';
+    const forYouText = (q4.village_hook ? q4.village_hook + '... I am really glad you found this.' : 'I am making these for ' + (q4.village_full || 'people who are right where I was') + '. If that is you, I am really glad you found this.') + ' Stay with me for the next six.';
+    return [
+      {label:'HOOK',                    desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                        text: hookText},
+      {label:'IDENTITY',                desc:'Opens with language that makes your exact viewer feel seen — signals who you are and who this is for.',
+                                        text: q2.before_full || 'Something has been making it hard to take that first step.'},
+      {label:'THE WAITING STRUGGLE',    desc:'Acknowledges the real frustration before offering anything — the internal tension that held you back.',
+                                        text: q3.catalyst_full || 'Something finally made it clear that today was the day.'},
+      {label:'THE START DECLARATION',   desc:'Closes the open loop — your commitment and the invitation for the right person to stay.',
+                                        text: commitText + ' ' + forYouText}
+    ];
+  } else {
+    const commitL2 = 'My name is '+name+'. Over these next seven videos, I want to share some things in a way you probably have not heard them before. Things that will actually help, whether you have been following me for a while or you just found this today.';
+    const inviteL2 = 'If you have been here for a while, thank you for still being here. If you are brand new, I am so glad you landed on this. Follow along with me for the next six because what comes next is worth your time.';
+    return [
+      {label:'HOOK',                      desc:'Grabs attention in the first two seconds — gives the viewer a reason to keep watching before you say anything else.',
+                                          text:(q2.village_hook||'If you know something needs to change')+'... I want to talk to you.'},
+      {label:'EXPERTISE',                 desc:'Establishes who you serve and the core problem you solve — signals why you\'re the right expert for this.',
+                                          text:'The people I am here for are '+(q2.village_full||'people ready to take the next step')+'. And the thing most of them are working through right now is this: '+(q3.before_full||'there is a real challenge standing between where they are and where they want to be.')},
+      {label:'THE MARKET GAP',            desc:'Grounds your credibility in lived experience — shows the gap in the market you\'re here to fill.',
+                                          text:q4.crack_full||'I have spent years working through this exact problem.'},
+      {label:'THE SOLUTION DECLARATION',  desc:'Closes the open loop — your commitment and the invitation for the right person to stay.',
+                                          text: commitL2 + ' ' + inviteL2}
+    ];
+  }
+}
+
+// ── SCRIPT VIEW HELPERS ────────────────────────────────
+function setScriptView(view) {
+  const beats   = document.getElementById('sv-beats');
+  const clean   = document.getElementById('sv-clean');
+  const gBtn    = document.getElementById('sv-guided-btn');
+  const cBtn    = document.getElementById('sv-clean-btn');
+  if (view === 'guided') {
+    if (beats) beats.style.display = 'block';
+    if (clean) clean.style.display = 'none';
+    if (gBtn)  gBtn.classList.add('active');
+    if (cBtn)  cBtn.classList.remove('active');
+  } else {
+    if (beats) beats.style.display = 'none';
+    if (clean) clean.style.display = 'block';
+    if (gBtn)  gBtn.classList.remove('active');
+    if (cBtn)  cBtn.classList.add('active');
+  }
+}
+
+function copyScript(btn) {
+  const editor = document.getElementById('script-editor');
+  if (!editor) return;
+  // Temporarily show clean view to read value, then restore
+  const beatsEl = document.getElementById('sv-beats');
+  const cleanEl = document.getElementById('sv-clean');
+  const wasClean = cleanEl && cleanEl.style.display !== 'none';
+  if (!wasClean && cleanEl) cleanEl.style.display = 'block';
+  const text = editor.value;
+  if (!wasClean && cleanEl) cleanEl.style.display = 'none';
+  navigator.clipboard.writeText(text).then(() => {
+    if (btn) { btn.textContent = '✅ Copied!'; btn.classList.add('copied'); }
+    setTimeout(() => { if (btn) { btn.textContent = '📋 Copy Script'; btn.classList.remove('copied'); } }, 2000);
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (btn) { btn.textContent = '✅ Copied!'; btn.classList.add('copied'); }
+    setTimeout(() => { if (btn) { btn.textContent = '📋 Copy Script'; btn.classList.remove('copied'); } }, 2000);
+  });
+}
+
+// ── LOCAL STORAGE / RETURNING USER ────────────────────
+const SAVE_KEY = 'bwb_challenge_v1';
+
+function saveProgress() {
+  const data = {
+    name:        state.name        || '',
+    level:       state.level       || '',
+    posted:      state.posted      || '',
+    history:     state.history     || '',
+    blocker:     state.blocker     || '',
+    videoStatus: state.videoStatus || {},
+    videos:      state.videos      || {},
+    mvoQ2:       state.mvoQ2       || null,
+    mvoQ3:       state.mvoQ3       || null,
+    mvoQ4:       state.mvoQ4       || null,
+    savedAt:     Date.now()
+  };
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    // Expire after 30 days
+    if (Date.now() - data.savedAt > 30 * 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(SAVE_KEY);
+      return;
+    }
+    if (data.name || data.level) {
+      const banner = document.getElementById('returning-banner');
+      const nameEl = document.getElementById('rb-name-display');
+      banner.classList.add('visible');
+      nameEl.textContent = data.name ? data.name + ' 👋' : '👋';
+      // Restore state so Continue works
+      if (data.name)        state.name        = data.name;
+      if (data.level)       state.level       = data.level;
+      if (data.posted)      state.posted      = data.posted;
+      if (data.history)     state.history     = data.history;
+      if (data.blocker)     state.blocker     = data.blocker;
+      if (data.videoStatus) state.videoStatus = data.videoStatus;
+      if (data.videos)      state.videos      = data.videos;
+      if (data.mvoQ2)       state.mvoQ2       = data.mvoQ2;
+      if (data.mvoQ3)       state.mvoQ3       = data.mvoQ3;
+      if (data.mvoQ4)       state.mvoQ4       = data.mvoQ4;
+      // Restore mvoQ2Skipped flag from saved onboarding data
+      if (data.mvoQ2 && (data.blocker || data.history)) mvoQ2Skipped = true;
+    }
+  } catch(e) {}
+}
+
+function continueSession() {
+  document.getElementById('returning-banner').classList.remove('visible');
+  // If they completed onboarding (level known), resume at the right place
+  if (state.level) {
+    // Bug fix: state.level is numeric (1 or 2), never the string 'L1'
+    screenOrder = state.level === 1
+      ? ['screen-0','screen-1','screen-2a','screen-3','screen-4','screen-5','screen-6','screen-recap','screen-checklist','screen-comm-layers','screen-mvo2','screen-mvo3','screen-mvo4','screen-7','screen-script','plan-screen']
+      : ['screen-0','screen-1','screen-2b','screen-3','screen-4','screen-5','screen-6','screen-recap','screen-checklist','screen-comm-layers','screen-mvo2','screen-mvo3','screen-mvo4','screen-7','screen-script','plan-screen'];
+
+    // Find the first video that hasn't been filmed or skipped
+    const videoCount = getVideos().length;
+    let resumeIdx = 0;
+    let allDone = true;
+    for (let i = 0; i < videoCount; i++) {
+      if (!state.videoStatus[i]) {
+        resumeIdx = i;
+        allDone = false;
+        break;
+      }
+    }
+
+    if (allDone) {
+      // All 7 videos complete — go straight to the plan
+      buildPlan();
+      showScreen('plan-screen');
+      currentIndex = screenOrder.indexOf('plan-screen');
+    } else {
+      // Resume at the first incomplete video's prompts screen
+      currentVideoIndex = resumeIdx;
+      buildVideoDots('video-dots');
+      buildVideoDots('script-dots');
+      buildVideoDots('cl-dots');
+      buildVideoDots('vi-dots');
+      renderVideoPrompts(currentVideoIndex);
+      showScreen('screen-7');
+      currentIndex = screenOrder.indexOf('screen-7');
+    }
+    window.scrollTo(0, 0);
+  } else {
+    goNext();
+  }
+}
+
+function dismissBanner() {
+  localStorage.removeItem(SAVE_KEY);
+  document.getElementById('returning-banner').classList.remove('visible');
+}
+
+// ── CONFETTI ──────────────────────────────────────────
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#4ade80','#22d3ee','#f9a8d4','#fbbf24','#818cf8','#67e8f9','#a3e635'];
+  const particles = [];
+  for (let i = 0; i < 160; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 10 + 5,
+      h: Math.random() * 5 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: Math.random() * 4 - 2,
+      vy: Math.random() * 4 + 3,
+      angle: Math.random() * Math.PI * 2,
+      spin: Math.random() * 0.2 - 0.1,
+      opacity: 1
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.angle += p.spin;
+      if (frame > 80) p.opacity -= 0.015;
+      if (p.y < canvas.height + 20 && p.opacity > 0) {
+        alive = true;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      }
+    });
+    frame++;
+    if (alive && frame < 200) {
+      requestAnimationFrame(draw);
+    } else {
+      canvas.style.display = 'none';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  draw();
+}
+
 // ── INIT ──────────────────────────────────────────────
+loadProgress();
 updateProgress('screen-0');
 </script>
 </body>
